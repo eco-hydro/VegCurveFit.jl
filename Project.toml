@@ -1,0 +1,13 @@
+name = "nlminb"
+uuid = "dec11fe7-d51b-4c55-8237-c7557eff4313"
+authors = ["Dongdong Kong"]
+version = "0.1.0"
+
+[compat]
+julia = "1.2"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
