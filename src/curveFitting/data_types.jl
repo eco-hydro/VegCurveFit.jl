@@ -14,3 +14,13 @@ function input_struct(y::AbstractArray{T, 1}, t::AbstractArray{T, 1}) where {T<:
     input_struct(y, t, ones(y))
 end
 
+mutable struct inputI_struct
+    y::AbstractArray{<:Real, 1}
+    t::AbstractArray{<:Real, 1}
+    w::AbstractArray{<:Real, 1}
+    ind::UnitRange{Int64}
+    # tout::AbstractArray{<:Real, 1}
+end
+
+
+export input_struct

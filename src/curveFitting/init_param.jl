@@ -1,12 +1,7 @@
-first(x::AbstractArray{T, 1}) where {T <:Real} = x[1] 
+first(x::AbstractArray{T, 1}) where {T<:Real} = x[1] 
 last(x::AbstractArray{T, 1}) where {T<:Real} = x[end] 
 
-# 
-# 
-# # parameters
-# 
-# 
-# 
+
 """
     init_param(y, t, w = nothing; w_min = 0.5)
 
@@ -72,5 +67,8 @@ function init_param(y, t, w = nothing; w_min = 0.5)
     par0, lims
 end
 
+function init_param(input::input_struct; options...) 
+    init_param(input.y, input.t, input.w; options...)
+end
 
 export first, last, init_param

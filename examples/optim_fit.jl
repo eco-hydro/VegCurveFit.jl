@@ -1,23 +1,27 @@
 # Write your own tests here.
-using nlminb
 using BenchmarkTools
 
-@btime begin
-    start = [ 1.0 ]; # [1, 2, 3, 4]
-    f(x) = x[1] - cos(x[1]) 
-    r = optim_nlminb(start, f, verbose = false)
-    r
-    # par  = start
-    # npar = length(par);
-    # iv   = zeros(Int32, 78 + 3 * npar);
-    # v    = zeros(Float64, 130 + Int((npar * (npar + 27)) / 2));
-    # libpath2 = "/mnt/e/Research/julia/nlminb.jl/deps/nlminb.so"
-    # # # Init iv and v, .Call("port_ivset", 2, iv, v)    
-    # ccall((:Rf_divset, libpath2), Cvoid, 
-    #     (Int32, Ptr{Int32}, Int32, Int32, Ptr{Float64}), 
-    #     2, iv, length(iv), length(v), v);
+
+
+
+
+begin
+    using doubleLogistics
 end
 
+
+using doubleLogistics
+
+## ex1
+sumsq(x, y) = sum((x -y).^2)
+y = repeat([1], 5)
+x0 = rand(5)
+nlminb(x0, sumsq, y)
+
+
+## ex2
+f(x) = x[1] - cos(x[1]) 
+r = nlminb([ 1.0 ], f; lower = [-10], upper = [12])
 
 
 ## wsl version -----------------------------------------------------------------

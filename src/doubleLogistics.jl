@@ -1,13 +1,11 @@
 module doubleLogistics
 import Libdl
 # using Printf
+using Parameters
 
-export goal, goal!, gof_RMSE
 
-
-include("optim/nlminb.jl")
-include("f_goal.jl")
-
-include("curveFitting/doubleLog_solve.jl")
+include("curveFitting/FitDL.jl")
+include("optim/optim_pheno.jl")
+include("weights/wFUN.jl")
 
 end # module
