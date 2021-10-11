@@ -7,8 +7,8 @@
 # t = R"seq(1, 365, 8)"  |> rcopy
 # par = R"c(0.1, 0.7, sos = 50, rsp = 0.1, eos = 250, rau = 0.1)" |> rget
 using Pkg
-Pkg.activate(".")
-# Pkg.activate("/mnt/e/Research/julia/nlminb.jl")
+# Pkg.activate(".")
+Pkg.activate("/mnt/e/Research/julia/nlminb.jl")
 
 using doubleLogistics
 using Parameters
@@ -43,7 +43,7 @@ end
 
 f(x) = x[1] - cos(x[1]) 
 
-println(nlminb([1.0], f))
+# println(nlminb([1.0], f))
 @show nlminb([ 1.0 ], f; lower = [-10], upper = [12], verbose = true)
 
 

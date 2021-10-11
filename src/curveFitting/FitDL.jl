@@ -16,8 +16,6 @@ function FitDL_Beck(input; options...)
     lower = [lims[key][1] for key in keys]
     upper = [lims[key][2] for key in keys]
     
-    # @show lower, upper
-    # @show prior
     optim_pheno(prior, input, doubleLog_Beck!;
         lower = lower, upper = upper, options...)
 end

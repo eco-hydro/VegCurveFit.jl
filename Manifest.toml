@@ -157,9 +157,9 @@ uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
 
 [[nlminb_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "OpenBLAS32_jll", "Pkg"]
-git-tree-sha1 = "7d72818c4b82dbdb213a09889f6c959b7368480a"
+git-tree-sha1 = "b8b733e0b9661caba77751ed326aba871ae1c671"
 uuid = "c04a2911-6870-53d6-aa47-4d7d5aff1028"
-version = "0.1.0+0"
+version = "0.1.1+0"
 
 [[p7zip_jll]]
 deps = ["Artifacts", "Libdl"]

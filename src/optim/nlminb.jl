@@ -1,24 +1,15 @@
 using Libdl
 
 using nlminb_jll
-# const libnlminb = "/mnt/e/Research/julia/nlminb/src/nlminb.so"
 # const libnlminb = "/mnt/e/Research/julia/nlminb.f/build/libnlminb.so"
-# const libnlminb = "/mnt/e/Research/julia/nlminb.f/libnlminb.so"
 
-# port_cpos <-
-#     c(## iv[]:
-#       ## MXFCAL       MXITER         OUTLEV  (port.c)
-#       eval.max = 17L, iter.max = 18L, trace = 19L,
-#                       maxiter  = 18L,
-#       ##  v[]:
-#       ## AFCTOL      RFCTOL         XCTOL        XFTOL
-#       abs.tol = 31L, rel.tol = 32L, x.tol = 33L, xf.tol = 34L,
-#       ## LMAX0        LMAXS           SCTOL
-#       step.min = 35L, step.max = 36L, sing.tol = 37L,
-#       ## DINIT          ETA0 (for nlminb *only*)
-#       scale.init = 38L, diff.g = 42L)
+# const libnlminb = "/mnt/e/Research/julia/nlminb/src/nlminb.so"                  # R version
+# const libnlminb = "/mnt/e/Research/julia/nlminb.f/libnlminb.so"                 # makefile
+
 
 """
+    nlminb(start, objective, ...; )
+    
 Param 
 - dot Other parameters to objective, e.g. t, y, w, FUN
 ## FUN::Function, y::T, t::T, 
@@ -53,12 +44,12 @@ function nlminb(start::AbstractArray{T,1},
     
     par  = start
     npar = length(par);
-    iv   = zeros(Int32, 78 + 3 * npar);
-    v    = zeros(Float64, 130 + Int((npar * (npar + 27)) / 2));
+    iv   = zeros(Cint, 78 + 3 * npar);
+    v    = zeros(Cdouble, 130 + Int((npar * (npar + 27)) / 2));
     
     # Init iv and v, .Call("port_ivset", 2, iv, v)    
     ccall((:Rf_divset, libnlminb), Cvoid, 
-        (Int32, Ptr{Int32}, Int32, Int32, Ptr{Float64}), 
+        (Cint, Ptr{Cint}, Cint, Cint, Ptr{Cdouble}), 
         2, iv, length(iv), length(v), v);
     # int alg, int iv[], int liv, int lv, double v[]
 
@@ -83,11 +74,11 @@ function nlminb(start::AbstractArray{T,1},
     for i = 1:eval_max
         # global fx, b, d, fx, g, h, iv, v, npar, par
         ccall((:nlminb_iterate, libnlminb), Cvoid, 
-            (Ptr{Float64}, Ptr{Float64}, Float64, Ptr{Float64}, Ptr{Float64}, 
-            # (Ptr{Cvoid}, Ptr{Float64}, Float64, Ptr{Float64}, Ptr{Float64}, 
-            Ptr{Cvoid}, Cint, Cint, Cint, Ptr{Float64}, Ptr{Float64}),
+            (Ptr{Cdouble}, Ptr{Cdouble}, Cdouble, Ptr{Cdouble}, Ptr{Cdouble}, 
+            Ptr{Cint}, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}),
             b, d, fx, g, h, 
             iv, length(iv), length(v), npar, v, par)
+        # F77_CALL(drmnfb)(b, d, &fx, iv, &liv, &lv, &n, v, x);
         # par0 will be modified of each iteration
         fx = objective(par, dot...)
         # fx = objective(par)
