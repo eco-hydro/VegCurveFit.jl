@@ -52,7 +52,7 @@ function init_param(y, t, w = nothing; w_min = 0.5)
         "t0"  => [doy_peak - deltaT, doy_peak + deltaT],
         "mn"  => [mn - deltaY    , mn + deltaY],
         "mx"  => [mx - deltaY*2  , mx + deltaY*2],
-        "r"   => [k/1.2          , k*5],
+        "k"   => [k/1.2          , k*5],
         "sos" => [tmin         , doy_peak + deltaT],
         "eos" => [doy_peak - deltaT, tmax]
     )
