@@ -6,7 +6,8 @@ end
 # input of check_input object
 mutable struct input_struct
     y::AbstractArray{<:Real, 1}
-    t::AbstractArray{<:Real, 1}
+    # t::AbstractArray{<:Dates.Date, 1}
+    t::AbstractArray{<:Union{Dates.Date, <:Real}, 1}
     w::AbstractArray{<:Real, 1}
 end
 

@@ -1,11 +1,5 @@
-include("data_types.jl")
-include("init_param.jl")
-include("doubleLog_func.jl")
 
-
-function FitDL_Beck(input; options...)
-    # if (missing(w)) w = rep(1, length(y))
-    # input = input_struct(y, t, w)
+function FitDL_Beck(input::input_struct; options...)
     par0, lims = init_param(input)
     # sFUN  = "doubleLog_Beck!"
     @unpack mn, mx, sos, eos, k, t1, t2, k = par0
@@ -19,6 +13,5 @@ function FitDL_Beck(input; options...)
     optim_pheno(prior, input, doubleLog_Beck!;
         lower = lower, upper = upper, options...)
 end
-
 
 export FitDL_Beck

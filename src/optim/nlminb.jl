@@ -1,11 +1,5 @@
 using Libdl
-
 using nlminb_jll
-# const libnlminb = "/mnt/e/Research/julia/nlminb.f/build/libnlminb.so"
-
-# const libnlminb = "/mnt/e/Research/julia/nlminb/src/nlminb.so"                  # R version
-# const libnlminb = "/mnt/e/Research/julia/nlminb.f/libnlminb.so"                 # makefile
-
 
 """
     nlminb(start, objective, ...; )
@@ -19,7 +13,9 @@ are set to 1000 at here.
 ## Return
 - `par`
 - `objective`
-- `convergence`
+- `convergence`: 
+    + `0`: convergent
+    + `1`: not convergent
 - `iterations`
 - `evaluations`
 
@@ -42,7 +38,7 @@ function nlminb(start::AbstractArray{T,1},
     verbose = false,
     eval_max = 1000, iter_max = 1000) where T<:Real
     
-    par  = start
+    par  = copy(start) # in case of memory error
     npar = length(par);
     iv   = zeros(Cint, 78 + 3 * npar);
     v    = zeros(Cdouble, 130 + Int((npar * (npar + 27)) / 2));
@@ -103,10 +99,5 @@ function nlminb_inspect_loop(i, par, fx; verbose = true)
         println("iteration: i = $i")
         @show par;
         @show fx
-        # n = length(dot...)
-        # println(n, dot...)
-        # @show dot...
-        # @show iv;
-        # @show v;
     end
 end

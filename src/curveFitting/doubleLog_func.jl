@@ -1,16 +1,7 @@
-using Statistics
-
-
 """
 doubleLog_AG
 """
-function doubleLog_AG(par::T, t::T)::T where T <: AbstractArray{<:Real, 1}
-    # if (sos >= eos) return(rep(9999, length(t)))    
-    ypred = ones(T, length(t)) * 99.0
-    doubleLog_AG!(ypred, par, t); ypred
-end
-
-function doubleLog_AG!(ypred::T, par::T, t::T) where T <: AbstractArray{<:Real, 1}
+function doubleLog_AG!(ypred::AbstractArray{T, 1}, par::AbstractArray{T, 1}, t::AbstractArray{T2, 1}) where {T<:Real, T2<:Real}
     t0  = par[1]
     mn  = par[2]
     mx  = par[3]
@@ -32,16 +23,10 @@ function doubleLog_AG!(ypred::T, par::T, t::T) where T <: AbstractArray{<:Real, 
     #                 ((t[t >  t0] - t0)*rau) ^a5) )
 end
 
-
 """
 doubleLog_Beck
 """
-function doubleLog_Beck(par::AbstractArray{T, 1}, t::AbstractArray{T, 1}) where T <: Real
-    ypred = ones(T, length(t)) * 99.0
-    doubleLog_Beck!(ypred, par, t); ypred
-end
-
-function doubleLog_Beck!(ypred::AbstractArray{T, 1}, par::AbstractArray{T, 1}, t::AbstractArray{T, 1}) where T <: Real
+function doubleLog_Beck!(ypred::AbstractArray{T, 1}, par::AbstractArray{T, 1}, t::AbstractArray{T2, 1}) where {T<:Real, T2<:Real}
     # mn  = par[1]
     # mx  = par[2]
     sos = par[3]
@@ -59,5 +44,20 @@ function doubleLog_Beck!(ypred::AbstractArray{T, 1}, par::AbstractArray{T, 1}, t
         end
     end
 end
+
+
+
+function doubleLog_template(par::AbstractArray{T, 1}, t::AbstractArray{T2, 1}, FUN!) where {T<:Real, T2<:Real}
+    ypred = ones(T, length(t)) * 99.0
+    FUN!(ypred, par, t)
+    ypred
+end
+
+doubleLog_Beck(par::AbstractArray{T, 1}, t::AbstractArray{T2, 1}) where {T<:Real, T2<:Real} = 
+    doubleLog_template(par, t, doubleLog_Beck!)
+
+doubleLog_AG(par::AbstractArray{T, 1}, t::AbstractArray{T2, 1}) where {T<:Real, T2<:Real} = 
+    doubleLog_template(par, t, doubleLog_AG!)
+
 
 export doubleLog_AG, doubleLog_AG!, doubleLog_Beck, doubleLog_Beck!

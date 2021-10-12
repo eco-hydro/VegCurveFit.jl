@@ -11,3 +11,5 @@ temp/
 *.o
 *.so
 *.dll
+examples/
+*.R
