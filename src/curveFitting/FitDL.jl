@@ -4,7 +4,18 @@ function get_bound(lims, keys)
     lower, upper
 end
 
-function init_AG(param::param_struct, lims)
+function init_Zhang(par0::param_struct, lims)
+    @unpack doy_peak, mn, mx, sos, eos, k, t1, t2 = par0
+    prior  = [
+        [doy_peak, mn, mx, sos   , k  , eos   , k  ],
+        [doy_peak, mn, mx, sos+t1, k*2, eos-t1, k*2],
+        [doy_peak, mn, mx, sos-t1, k  , eos+t2, k]]
+
+    keys = ["t0", "mn", "mx", "sos", "k", "eos", "k"]
+    prior, get_bound(lims, keys)...
+end
+
+function init_AG(par0::param_struct, lims)
     @unpack doy_peak, mn, mx, sos, eos, k, t1, t2, half = par0
     prior = [
         # [doy_peak, mn, mx, 0.2*half, 1  , 0.2*half, 1),
@@ -18,18 +29,7 @@ function init_AG(param::param_struct, lims)
     prior, lower, upper
 end
 
-function init_Zhang(param::param_struct, lims)
-    @unpack doy_peak, mn, mx, sos, eos, k, t1, t2 = par0
-    prior  = [
-        [doy_peak, mn, mx, sos   , k  , eos   , k  ],
-        [doy_peak, mn, mx, sos+t1, k*2, eos-t1, k*2],
-        [doy_peak, mn, mx, sos-t1, k  , eos+t2, k]]
-
-    keys = ["t0", "mn", "mx", "sos", "k", "eos", "k"]
-    prior, get_bound(lims, keys)...
-end
-
-function init_Beck(param::param_struct, lims)
+function init_Beck(par0::param_struct, lims)
     @unpack mn, mx, sos, eos, k, t1, t2= par0
     prior = [
         [mn, mx, sos   , k  , eos   , k], 
@@ -39,7 +39,7 @@ function init_Beck(param::param_struct, lims)
     prior, get_bound(lims, keys)...
 end
 
-function init_Elmore(param::param_struct, lims)
+function init_Elmore(par0::param_struct, lims)
     @unpack mn, mx, sos, eos, k, t1, t2 = par0
     prior = [
         # [mn, mx - mn, sos   , k*1.25 , eos   , k*1.25 , 0.002),
@@ -47,16 +47,19 @@ function init_Elmore(param::param_struct, lims)
         [mn, mx - mn, sos+t1, k*2.5  , eos-t2, k*2.5  , 0.002],
         [mn, mx - mn, sos-t1, k*0.25 , eos+t2, k*0.25 , 0.001]]
     
+    # formula = mn + (mx - m7*t)*( 1/(1 + exp(-rsp*(t-sos))) - 1/(1 + exp(-rau*(t-eos))) )
+    # par = ["mn", "mx", "sos", "rsp", "eos", "rau", "m7"]
     keys = ["mn", "mx", "sos", "k", "eos", "k"]
-    prior, get_bound(lims, keys)...
+    lower, upper = get_bound(lims, keys)
+    prior, [lower; 0], [upper; 1] # add m7
 end
 
-function init_Gu(param::param_struct, lims)
-    a  = param.ampl
-    b1 = 0.1
-    b2 = 0.1
-    c1 = 1
-    c2 = 1
+function init_Gu(par0::param_struct, lims)
+    a  = par0.ampl
+    # b1 = 0.1
+    # b2 = 0.1
+    # c1 = 1
+    # c2 = 1
     @unpack mn, mx, sos, eos, k, t1, t2, half = par0
     prior = [
         # [mn, a, a, sos-t1, k/2 , eos+t2, k/2, 1  , 1),
@@ -64,17 +67,20 @@ function init_Gu(param::param_struct, lims)
         [mn, a, a, sos   , k   , eos   , k  , 2  , 2  ],
         [mn, a, a, sos+t1, k*2 , eos-t2, k*2, 0.5, 0.5],
         [mn, a, a, sos+t1, k*3 , eos-t2, k*3, 5  , 5  ]]
-    # y0 + (a1/(1 + exp(-(t - t1)/b1))^c1) - (a2/(1 + exp(-(t - t2)/b2))^c2)
+    
+    # formula = y0 + (a1/(1 + exp(-(t - t1)/b1))^c1) - (a2/(1 + exp(-(t - t2)/b2))^c2)
+    # par = ["y0", "a1", "a2", "sos", "rsp", "eos", "rau", "c1", "c2"]
     keys = ["mn", "mx", "mx", "sos", "k", "eos", "k"]
-    prior, get_bound(lims, keys)...
+    lower, upper = get_bound(lims, keys)
+    prior, [lower; 0; 0], [upper; Inf; Inf] # add c1, c2
 end
 
-function init_Klos(param::param_struct, lims)
+function init_Klos(par0::param_struct, lims)
     a1 = 0
     a2 = 0  #ok
-    b1 = param.mn #ok
+    b1 = par0.mn #ok
     b2 = 0  #ok
-    c  = 0.2 * param.mx  # ok
+    c  = 0.2 * par0.mx  # ok
     ## very slightly smoothed spline to get reliable maximum
     # tmp = smooth.spline(y, df = 0.5 * length(y))
 
@@ -103,13 +109,36 @@ function init_Beck(input::input_struct)
     init_Beck(param, lims)
 end
 
-function FitDL_Beck(input::input_struct; options...)
+## -----------------------------------------------------------------------------
+function FitDL_template(input::input_struct, method = nothing; options...)
+    par0, lims = init_param(input)
+    
+    func_init = getfield(curvefit, Symbol("init_$method"))
+    func!     = getfield(curvefit, Symbol("doubleLog_$(method)!"))
+    
+    prior, lower, upper = func_init(par0, lims)
+    # opt (Dict): par, obj
+    res = optim_pheno(prior, input, func!;
+        lower = lower, upper = upper, options...)
+    # Dict("par"    => res["par"], 
+    #      "obj"    => res["obj"], 
+    #      "method" => method)
+end
+
+FitDL_AG(input::input_struct; options...)     = FitDL_template(input, "AG"    ; options...)
+FitDL_Zhang(input::input_struct; options...)  = FitDL_template(input, "Zhang" ; options...)
+FitDL_Beck(input::input_struct; options...)   = FitDL_template(input, "Beck"  ; options...)
+FitDL_Elmore(input::input_struct; options...) = FitDL_template(input, "Elmore"; options...)
+FitDL_Gu(input::input_struct; options...)     = FitDL_template(input, "Gu"    ; options...)
+FitDL_Klos(input::input_struct; options...)   = FitDL_template(input, "Klos"  ; options...)
+
+function FitDL_Beck2(input::input_struct; options...)
     param, lims = init_param(input)
     prior, lower, upper = init_Beck(param, lims)
-
     optim_pheno(prior, input, doubleLog_Beck!;
         lower = lower, upper = upper, options...)
 end
 
 
-export FitDL_Beck
+export FitDL_AG, FitDL_Zhang, FitDL_Beck, FitDL_Elmore, FitDL_Gu, FitDL_Klos, 
+    FitDL_Beck2

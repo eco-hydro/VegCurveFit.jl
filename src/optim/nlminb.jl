@@ -78,13 +78,13 @@ function nlminb(start::AbstractArray{T,1},
         # par0 will be modified of each iteration
         fx = objective(par, dot...)
         # fx = objective(par)
-        nlminb_inspect_loop(i, par, fx; verbose = verbose)
+        # nlminb_inspect_loop(i, par, fx; verbose = verbose)
         if (iv[1] >= 3); break; end
     end
     
     Dict(
         "par"         => par,
-        "objective"   => fx,
+        "obj"   => fx,
         "convergence" => 3 <= iv[1] <= 6 ? 0 : 1,
         "iterations"  => iv[31],
         "evaluations" => Dict("function" => iv[6], "gradient" => iv[30])

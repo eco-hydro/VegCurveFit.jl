@@ -15,8 +15,8 @@
 function get_extentI(w0, I_beg, I_end, nptperyear; 
     maxExtendMonth = 2, minExtendMonth = 1, nextend = 2, wmin = 0.2)
 
-    MaxExtendWidth = ceil(nptperyear / 12 * maxExtendMonth)
-    MinExtendWidth = ceil(nptperyear / 12 * minExtendMonth)
+    MaxExtendWidth = ceil(Int, nptperyear / 12 * maxExtendMonth)
+    MinExtendWidth = ceil(Int, nptperyear / 12 * minExtendMonth)
 
     n = length(w0)
     I_beg2 = I_end2 = NaN
