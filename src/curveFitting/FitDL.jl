@@ -120,9 +120,10 @@ function FitDL_template(input::input_struct, method = nothing; options...)
     # opt (Dict): par, obj
     res = optim_pheno(prior, input, func!;
         lower = lower, upper = upper, options...)
-    # Dict("par"    => res["par"], 
-    #      "obj"    => res["obj"], 
-    #      "method" => method)
+    Dict("par"    => res["par"], 
+         "obj"    => res["obj"], 
+         "method" => method)
+    # par, obj, method
 end
 
 FitDL_AG(input::input_struct; options...)     = FitDL_template(input, "AG"    ; options...)

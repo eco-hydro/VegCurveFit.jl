@@ -11,5 +11,8 @@ temp/
 *.o
 *.so
 *.dll
+
 examples/
 *.R
+*.jld
+*.jld2

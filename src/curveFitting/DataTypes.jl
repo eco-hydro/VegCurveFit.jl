@@ -3,6 +3,23 @@ mutable struct param_struct
     mx; mn; ampl; sos; eos; doy_peak; deltaT; deltaY; half; t1; t2; k
 end
 
+# method, par, tout, ylu
+mutable struct predictInput_struct
+    method::Vector{String} # vector of string
+    par::Vector{Vector{Float64}}   # vector of model parameters
+    tout::UnitRange{Int64}
+    ylu::Vector{Float64}
+end
+
+mutable struct predictor_struct
+    # method::Vector{String} # vector of string
+    opt::Vector{Dict{String, Any}}   # vector of model parameters
+    tout::UnitRange{Int64}
+    ylu::Vector{Float64}
+end
+
+
+
 # input of check_input object
 mutable struct input_struct
     y::AbstractArray{<:Real, 1}
@@ -24,4 +41,4 @@ mutable struct inputI_struct
 end
 
 
-export input_struct
+export input_struct, predictInput_struct, predictor_struct

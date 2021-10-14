@@ -30,11 +30,12 @@ function get_ylu(y, years, w0, width::Integer, I; wmin = 0.2)
     end
 end
 
-function merge_ylu(ylu_org, ylu_new)
-    ylu = copy(ylu_org)
-    if !isnan(ylu_new[1]); ylu[1] = max(ylu[1], ylu_new[1]); end
-    if !isnan(ylu_new[2]); ylu[2] = max(ylu[2], ylu_new[2]); end
-    ylu
+# update ylu_new directly
+function merge_ylu!(ylu, ylu_new)
+    # ylu = copy(ylu_org)
+    if !isnan(ylu_new[1]); ylu_new[1] = max(ylu[1], ylu_new[1]); end
+    if !isnan(ylu_new[2]); ylu_new[2] = min(ylu[2], ylu_new[2]); end
+    # ylu
 end
 
 

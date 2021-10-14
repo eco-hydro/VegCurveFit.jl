@@ -19,6 +19,7 @@ FINE_fitings = Dict(
 function curvefits(input_R, brks; 
     methods = ["AG", "Zhang", "Beck", "Elmore"]) # , "Gu"
 
+    ylu  = input_R[:ylu]
     input = input_struct(input_R[:y], input_R[:t], input_R[:w])
     date_origin = Date("2000-01-01")
     t    = input.t
@@ -41,21 +42,33 @@ function curvefits(input_R, brks;
         I_end = ends[i]
         I = I_beg:I_end
         I_extend = get_extentI(w0, I_beg, I_end, nptperyear)
-        ylu = get_ylu(input.y, years, w0, width_ylu, I; wmin = 0.2)
-        
+        ylu_period = get_ylu(input.y, years, w0, width_ylu, I; wmin = 0.2) # ylu_period 
+        merge_ylu!(ylu, ylu_period)
+        # println(ylu_period)
+
         ti = doys[I_extend]
         yi = input.y[I_extend]
         wi = input.w[I_extend]
-        # @show I_extend, ti, yi, wi
-        # ibeg = i == 1 ? 1 : 2
-        # tout = ti[ibeg]:ti[end]
+        # @show I_extend, ti, yi, wi, ylu_period
+        
+        ibeg = i == 1 ? 1 : 2
+        tout = ti[ibeg]:ti[end]
+        
         ## solve double logistics
         inputI = input_struct(yi, ti, wi)
         opt = map(meth -> FINE_fitings[meth](inputI), methods)
-        push!(opts, opt)
+        # par, obj, method
+        
+        # pars = map(x -> x["par"], opt)
+        # pars = pmap(opt, "par")
+        # predictor = predictInput_struct(models, tout, ylu)
+        predictor = predictor_struct(opt, tout, ylu)
+        push!(opts, predictor)
+        # push!(opts, opt)
     end
     opts
 end
+
 
 
 export curvefits

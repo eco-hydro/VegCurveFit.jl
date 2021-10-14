@@ -22,4 +22,13 @@ function aggregate(x::AbstractArray{T, 1}, by::AbstractArray{T2, 1}, FUN::Functi
 end
 
 
-export first, last, day2num, aggregate
+function pmap(vec::Vector{Vector}, prop::Int)
+    map(x -> x[prop], vec)
+end
+
+function pmap(vec::Vector{Dict}, prop)
+    map(x -> x[prop], vec)
+end
+
+export first, last, day2num, aggregate, 
+    pmap2

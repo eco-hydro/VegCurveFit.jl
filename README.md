@@ -1,4 +1,4 @@
-# nlminb
+# curvefit.jl
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://kongdd.github.io/nlminb.jl/stable)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://kongdd.github.io/nlminb.jl/dev)
@@ -6,10 +6,9 @@
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/kongdd/nlminb.jl?svg=true)](https://ci.appveyor.com/project/kongdd/nlminb-jl)
 [![Codecov](https://codecov.io/gh/kongdd/nlminb.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/kongdd/nlminb.jl)
 
-# Optimization using PORT routines
+# Vegetation Index Curve fitting
 
-Unconstrained and box-constrained optimization using PORT routines.
-
+> Dongdong Kong, China University of Geosciences (WuHan)
 
 # References
 1. David M. Gay (1990), Usage summary for selected optimization routines. Computing Science Technical Report 153, AT&T Bell Laboratories, Murray Hill.
