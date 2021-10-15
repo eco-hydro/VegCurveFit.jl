@@ -7,7 +7,9 @@ include("get_extent.jl")
 include("FitDL.jl")
 
 
-FINE_fitings = Dict(
+DATE_ORIGIN = Date("2000-01-01")
+
+FUNCS_FITDL = Dict(
     "AG"     => FitDL_AG,
     "Zhang"  => FitDL_Zhang, 
     "Beck"   => FitDL_Beck,
@@ -16,24 +18,35 @@ FINE_fitings = Dict(
     "Klos"   => FitDL_Klos
 )
 
-function curvefits(input_R, brks; 
-    methods = ["AG", "Zhang", "Beck", "Elmore"]) # , "Gu"
+FUNCS_doubleLog = Dict(
+    "AG"     => doubleLog_AG,
+    "Zhang"  => doubleLog_Zhang, 
+    "Beck"   => doubleLog_Beck,
+    "Elmore" => doubleLog_Elmore, 
+    "Gu"     => doubleLog_Gu,
+    "Klos"   => doubleLog_Klos
+)
 
-    ylu  = input_R[:ylu]
-    input = input_struct(input_R[:y], input_R[:t], input_R[:w])
-    date_origin = Date("2000-01-01")
+
+function curvefits(y::AbstractArray{T, 1}, t, w::::AbstractArray{T, 1}, 
+    ylu::Vector{Float64}, nptperyear::Integer, 
+    dt; 
+    methods = ["AG", "Zhang", "Beck", "Elmore"]) where T<:Real
+    
+    # ylu  = input_R[:ylu]
+    input = input_struct(y, t, w)
+    # input = input_struct(input_R[:y], input_R[:t], input_R[:w])
     t    = input.t
     w    = input.w
     w0   = copy(w)
-    doys = (t - date_origin) |> day2num
+    doys = (t - DATE_ORIGIN) |> day2num
     years = Dates.year.(t)
-
-    nptperyear = input_R[:nptperyear] |> Int
+    # nptperyear = input_R[:nptperyear] |> Int
     width_ylu  = nptperyear*2
 
-    begs  = getDateId(brks[:dt][:, :beg], t)
-    # peaks = getDateId(brks[:dt][:, :peak], t)
-    ends  = getDateId(brks[:dt][:, :end], t, "after")
+    begs  = getDateId(dt[:, :beg], t)
+    # peaks = getDateId(dt[:, :peak], t)
+    ends  = getDateId(dt[:, :end], t, "after")
     ns = length(begs) # number of seasons
 
     opts = []
@@ -56,19 +69,24 @@ function curvefits(input_R, brks;
         
         ## solve double logistics
         inputI = input_struct(yi, ti, wi)
-        opt = map(meth -> FINE_fitings[meth](inputI), methods)
-        # par, obj, method
-        
+        opt = Dict{String, Any}()
+        for meth = methods
+            temp = FUNCS_FITDL[meth](inputI) # par, obj, method
+            # opt["ypred"] = getfield(curvefit, Symbol("doubleLog_$meth"))(opt["par"], tout)
+            temp["zs"] = FUNCS_doubleLog[meth](temp["par"], tout)
+            temp["fun"] = "doubleLog.$meth"
+            opt[meth] = temp
+            # push!(opt, temp)
+        end
         # pars = map(x -> x["par"], opt)
         # pars = pmap(opt, "par")
         # predictor = predictInput_struct(models, tout, ylu)
-        predictor = predictor_struct(opt, tout, ylu)
-        push!(opts, predictor)
-        # push!(opts, opt)
+        # predictor = predictor_struct(opt, tout, ylu)
+        r = Dict("tout" => tout, "model" => opt)
+        push!(opts, r)
     end
     opts
 end
-
 
 
 export curvefits
