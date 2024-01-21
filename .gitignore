@@ -16,3 +16,5 @@ examples/
 *.R
 *.jld
 *.jld2
+
+Manifest.toml

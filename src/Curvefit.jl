@@ -1,4 +1,4 @@
-module curvefit
+module Curvefit
 
 import Libdl
 using Parameters
