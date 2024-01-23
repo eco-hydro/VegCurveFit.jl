@@ -53,3 +53,19 @@ brks_mov <- season_mov(INPUT,
 
 plot_season(INPUT, brks_mov, ylab = "VI", margin = 0.2, show.shade = FALSE)
 ```
+
+
+## julia
+
+```{julia}
+using RTableTools
+using UnPack
+using Plots
+using Dates
+gr(framestyle=:box)
+
+d = fread("data/Tumbarumba_EVI2.csv")
+@unpack y, t, w, QC_flag = d
+
+plot(t, y)
+```
