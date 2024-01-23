@@ -14,7 +14,7 @@ Gianluca Frasso and Paul HC Eilers, 2015
 
 1. Gianluca Frasso and Paul HC Eilers, L- and V-curves for optimal smoothing, 2015
 """
-function whit_cv(y, w, lambda=2.0; include_cve=true)
+function whit2_cv(y, w, lambda=2.0; include_cve=true)
   # w = y*0 .+ 1.0
   n = length(y)
   g0 = ones(n) * 6 #rep(6, n)
@@ -89,7 +89,7 @@ function whit_cv(y, w, lambda=2.0; include_cve=true)
 
     # Compute diagonal of inverse
     # params: v, u1, u2, s0, s1, s2
-    for i = n:-1:1
+    @inbounds for i = n:-1:1
       i1 = i + 1
       i2 = i + 2
       s0[i] = 1 / v[i]
@@ -110,8 +110,9 @@ function whit_cv(y, w, lambda=2.0; include_cve=true)
   z, cve
 end
 
-# fid = matopen("/mnt/n/Research/PML_V2/pkg_smooth/y.mat")
-# y = read(fid, "y")[:,1]
+
+export whit2_cv
+
 # @time z, cve = whit_cv(y, w, 2.0)
 
 # w = y*0 .+ 1

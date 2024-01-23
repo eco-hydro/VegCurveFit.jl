@@ -2,9 +2,14 @@ module VegCurveFit
 
 using LinearAlgebra
 using Libdl
-using Parameters
+using Parameters, UnPack
 using Dates
 using Statistics
+
+using Reexport
+@reexport using Serialization: serialize, deserialize
+@reexport using DelimitedFiles: readdlm
+
 
 include("DataTypes.jl")
 include("tools.jl")

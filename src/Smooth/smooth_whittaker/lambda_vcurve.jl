@@ -109,7 +109,8 @@ function lambda_cv(y::AbstractVector{T}, w::AbstractVector{T2};
   cvs = zeros(n)
 
   # least of memory used
-  interm === nothing && (interm = interm_whit{Float32}(n=length(y)))
+  FT=promote_type(T, T2)
+  interm === nothing && (interm = interm_whit{FT}(n=length(y)))
 
   # pens = zeros(n)
   for i in 1:n

@@ -5,7 +5,7 @@ function HANTS(y, t, w; periodlen = 365, nf = 3)
 
   amp = zeros(nf + 1)
   phi = zeros(nf + 1)
-  yz = zeros(n)
+  # yz = zeros(n)
 
   ang = 2 * pi * (0:(periodlen-1)) / periodlen
   cs = cos(ang)

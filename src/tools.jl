@@ -3,8 +3,7 @@
 #     println("optimized improved:", mean(b_old.times)/mean(b_new.times), " times")
 # end
 
-# first(x::AbstractVector) = x[1]
-# last(x::AbstractVector) = x[end]
+null_default(x, default) = x === nothing ? default : x
 
 day2num(x::AbstractArray{Dates.Day,1}) = map(x -> x.value, x)
 

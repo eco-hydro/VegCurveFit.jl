@@ -14,7 +14,7 @@
 - `alpha`     : for quantile calculating in `get_ylu`
 - `options...`: other parameters to [wBisquare()]
 """
-function smooth_whit(y, qc, date;
+function smooth_whit(y, w, args...;
   iters=3,
   λ=nothing,
   fun_λ=lambda_cv,
@@ -27,7 +27,7 @@ function smooth_whit(y, qc, date;
   # use_spike=false,
   ignored...)
 
-  w, QC_flag = qc_FparLai(qc; wmin, wmid, wmax)
+  # w, QC_flag = qc_FparLai(qc; wmin, wmid, wmax)
   ylu, wc = get_ylu(y, w; wmin, wmid, wmax, alpha)
   # if use_spike
   #   ## not tested, kdd
@@ -37,7 +37,7 @@ function smooth_whit(y, qc, date;
   #   I_bad_spike = @.((I_spike) & (I_bad))
   #   y[I_bad_spike] .= minimum(y)
   # end
-  data = DataFrame(; date, y, w, QC_flag)
+  data = DataFrame(; y, w, args)
 
   λs = []
   λᵢ = 2 # default value
@@ -51,10 +51,10 @@ function smooth_whit(y, qc, date;
       clamp!(yfit, ylu[1], Inf) # constrain in the range of ylu
       # w[yfit .<= ylu[1]] .= wmin
       w = wFUN(y, yfit, w; iter=i, nptperyear, wmin=0.05, options...)
-      dfit = DataFrame(; date, y0=y, z=yfit, w)
+      dfit = DataFrame(; y0=y, z=yfit, w, args...)
     end, 1:iters)
 
-  predict = melt_list(res, iter=1:iters)
+  predict = res # melt_list(res, iter=1:iters)
   # (; data, predict, param=λs)
   Dict("data" => data, "predict" => predict, "param" => λs)
 end

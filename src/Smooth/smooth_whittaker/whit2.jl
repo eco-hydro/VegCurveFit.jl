@@ -34,10 +34,9 @@ whit2(y, w, lambda, z, c, d, e)
 'Smoothing and interpolation with finite differences' [Eilers P. H. C, 1994]
 (URL: http://dl.acm.org/citation.cfm?id=180916)
 """
-function whit2(y::AbstractVector{<:Real}, w::AbstractVector{FT}, lamb::Real; include_cve=true) where {
-  FT<:Real}
+function whit2(y::AbstractVector{T1}, w::AbstractVector{T2}, lamb::Real; include_cve=true) where {T1<:Real,T2<:Real}
 
-  # FT = Float32
+  FT = promote_type(T1, T2)
   interm = interm_whit{FT}(; n=length(y))
 
   cve = whit2!(y, w, lamb, interm; include_cve)

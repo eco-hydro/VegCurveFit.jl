@@ -29,6 +29,18 @@ using Test
   @test cve_cv < cve_vcurve
 end
 
+
+@testset "whit2" begin
+  d = deserialize("../data/Tumbarumba_EVI2")
+  @unpack y, t, w = d
+
+  z, cve1 = whit2_cv(y, w, 2)
+  z, cve2 = whit2(y, w, 2)
+  @test cve1 ≈ cve2
+  @test_nowarn r = smooth_whit(y, w)
+end
+
+
 # using BenchmarkTools
 # @benchmark
 # 4 times faster than R
