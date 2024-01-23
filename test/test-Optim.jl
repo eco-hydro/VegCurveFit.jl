@@ -9,6 +9,6 @@
   end
 
   f(x) = x[1] - cos(x[1])
-  r = nlminb(start, f, verbose=false)
+  r = nlminb(start, f)
   @test r["par"][1] == -1.5701006351106073
 end

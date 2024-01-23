@@ -35,7 +35,7 @@ end
 """
     check_season!(d; r_max=0.1, r_min=0.02, rtrough_max=0.7, DAYS_maxDIFF=50, DAYS_max2GS=650)
 
-# Arguements
+# Arguments
 - `DAYS_maxDIFF`: t_diff <= DAYS_maxDIFF; # 相差在`DAYS_maxDIFF`天内认为相邻
 - `DAYS_max2GS`: max length of two growing seasons being able to merge
 """
