@@ -1,11 +1,12 @@
 module VegCurveFit
 
 using LinearAlgebra
-import Libdl
+using Libdl
 using Parameters
 using Dates
 using Statistics
 
+include("DataTypes.jl")
 include("tools.jl")
 
 include("Optim/Optim.jl")

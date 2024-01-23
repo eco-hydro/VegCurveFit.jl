@@ -1,4 +1,3 @@
-include("DataTypes.jl")
 include("init_param.jl")
 include("doubleLogistics.jl")
 

@@ -1,6 +1,3 @@
-using LinearAlgebra
-
-
 multiply_col!(S::AbstractArray{T1,2}, w::AbstractArray{T}) where {
   T1<:Real,T<:Real} = begin
   nrow, ncol = size(S)

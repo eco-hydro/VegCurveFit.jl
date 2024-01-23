@@ -1,6 +1,3 @@
-using StaticArrays
-
-
 function sgmat_S(halfwin::Int=1, d::Int=2)
   frame = 2 * halfwin + 1
   mat = zeros(Int, frame, d + 1)
