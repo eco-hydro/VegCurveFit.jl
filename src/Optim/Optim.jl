@@ -21,7 +21,7 @@ function optim_pheno(prior, input::input_struct, FUN!::Function=doubleLog_Beck!;
     # println("i = $i")
     opts = map(par0 -> begin
         nlminb(par0, goal!, FUN!, input, ypred;
-          lower=lower, upper=upper, eval_max=1000, iter_max=1000)
+          lower, upper, feval_max=1000, iter_max=1000)
       end, prior)
     # get the best option
     fx, i_opt = map(opt -> opt["obj"], opts) |> findmin

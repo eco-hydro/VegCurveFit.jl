@@ -4,15 +4,14 @@ using nlminb_jll
 """
     nlminb(start, objective, ...; )
     
-Param 
+## Arguments
 - `args`: Other parameters to objective, e.g. t, y, w, FUN
-
-## FUN::Function, y::T, t::T, 
 
 -  feval_max, iter_max: The default value in fortran is 200 and 150. But they 
 are set to 1000 at here.
 
 ## Return
+
 - `par`
 - `objective`
 - `convergence`: 
@@ -20,6 +19,13 @@ are set to 1000 at here.
     + `1`: not convergent
 - `iterations`
 - `evaluations`
+
+## References
+
+1. David M. Gay (1990), Usage summary for selected optimization routines.
+   Computing Science Technical Report 153, AT&T Bell Laboratories, Murray Hill.
+
+2. <http://www.netlib.org/port/>
 
 ## Example
 ```julia

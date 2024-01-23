@@ -1,0 +1,55 @@
+```{r}
+library(phenofit)
+library(Ipaper) # remotes::install_github("rpkgs/Ipaper")
+library(ggplot2)
+# library(grid)
+# library(ggnewscale)
+library(lubridate)
+library(data.table)
+library(dplyr)
+```
+
+```{r}
+date_start <- as.Date("2016-01-01")
+date_end <- as.Date("2023-12-31")
+
+f <- "data/Tumbarumba/Tumbarumba_EVI2.csv"
+d <- fread(f) |>
+  mutate(t = as.Date(t)) |>
+  filter(t >= date_start, t <= date_end) |>
+  select(-site)
+fwrite(d, "data/Tumbarumba_EVI2.csv")
+```
+
+```{r}
+ggplot(d, aes(t, y)) + 
+  geom_line()
+# write_fig(p, 'd:/Figure1.pdf', 10, 5)
+```
+
+```{r}
+nptperyear <- 40
+wFUN <- "wTSM"
+
+INPUT <- check_input(d$t, d$y, d$w,
+  QC_flag = d$QC_flag,
+  nptperyear = nptperyear,
+  maxgap = nptperyear / 4, wmin = 0.2, south = TRUE, verbose = TRUE
+)
+
+str(INPUT)
+```
+
+```{r}
+# curve fitting by year
+brks_mov <- season_mov(INPUT,
+  options = list(
+    rFUN = "smooth_wWHIT", wFUN = "wTSM", maxExtendMonth = 6, calendarYear = TRUE, wmin = 0.2,
+    lambda = 100, iters = 2,
+    r_min = 0.05, ypeak_min = 0.1,
+    verbose = TRUE
+  ), years.run = 2016:2023
+)
+
+plot_season(INPUT, brks_mov, ylab = "VI", margin = 0.2, show.shade = FALSE)
+```
