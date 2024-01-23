@@ -5,9 +5,11 @@ using nlminb_jll
     nlminb(start, objective, ...; )
     
 Param 
-- dot Other parameters to objective, e.g. t, y, w, FUN
+- `args`: Other parameters to objective, e.g. t, y, w, FUN
+
 ## FUN::Function, y::T, t::T, 
--  eval_max, iter_max: The default value in fortran is 200 and 150. But they 
+
+-  feval_max, iter_max: The default value in fortran is 200 and 150. But they 
 are set to 1000 at here.
 
 ## Return
@@ -25,18 +27,17 @@ t = Array(1.0:8:366)
 y = doubleLog_Beck(par, t)
 ypred = doubleLog_Beck(par0, t)
 par0 = [0.05, 0.6, 45, 0.1, 200, 0.2]
-@time opt_par = nlminb(par0, goal!, doubleLog_Beck!, y, t, ypred, verbose = false,
-    eval_max = 1000, iter_max = 1000)
+@time opt_par = nlminb(par0, goal!, doubleLog_Beck!, y, t, ypred, 
+    feval_max = 1000, iter_max = 1000)
 ```
 """
-function nlminb(start::AbstractArray{T,1},
-  objective::Function, dot...;
+function nlminb(start::AbstractVector{T}, objective::Function, args...;
   # gr::Union{Function,Nothing} = nothing, 
   # hs::Union{Function,Nothing} = nothing, 
   lower=nothing,
   upper=nothing,
-  verbose=false,
-  eval_max=1000, iter_max=1000) where {T<:Real}
+  # verbose=false,
+  feval_max=1000, iter_max=1000) where {T<:Real}
 
   par = copy(start) # in case of memory error
   npar = length(par)
@@ -49,7 +50,7 @@ function nlminb(start::AbstractArray{T,1},
     2, iv, length(iv), length(v), v)
   # int alg, int iv[], int liv, int lv, double v[]
 
-  iv[17] = eval_max
+  iv[17] = feval_max
   iv[18] = iter_max
 
   if lower !== nothing && upper !== nothing
@@ -67,7 +68,7 @@ function nlminb(start::AbstractArray{T,1},
   g = h = C_NULL  # set grad and hess to NULL
   fx = Inf64      # Inf64, goal value
 
-  for i = 1:eval_max
+  for i = 1:feval_max
     # global fx, b, d, fx, g, h, iv, v, npar, par
     ccall((:nlminb_iterate, libnlminb), Cvoid,
       (Ptr{Cdouble}, Ptr{Cdouble}, Cdouble, Ptr{Cdouble}, Ptr{Cdouble},
@@ -76,7 +77,7 @@ function nlminb(start::AbstractArray{T,1},
       iv, length(iv), length(v), npar, v, par)
     # F77_CALL(drmnfb)(b, d, &fx, iv, &liv, &lv, &n, v, x);
     # par0 will be modified of each iteration
-    fx = objective(par, dot...)
+    fx = objective(par, args...)
     # fx = objective(par)
     # nlminb_inspect_loop(i, par, fx; verbose = verbose)
     if (iv[1] >= 3)
@@ -96,10 +97,10 @@ end
 
 export nlminb
 
-function nlminb_inspect_loop(i, par, fx; verbose=true)
-  if verbose
-    println("iteration: i = $i")
-    @show par
-    @show fx
-  end
-end
+# function nlminb_inspect_loop(i, par, fx; verbose=true)
+#   if verbose
+#     println("iteration: i = $i")
+#     @show par
+#     @show fx
+#   end
+# end
