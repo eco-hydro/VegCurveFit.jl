@@ -1,9 +1,10 @@
 using Test
-using JLD2, UnPack
-@unpack y, w, t, ylu, dt, nptperyear = load("data/phenofit-CA_NS6.jld2")
+using JLD2, UnPack, DataFrames
+@unpack y, w, t, ylu, dt, nptperyear = load("../data/phenofit-CA_NS6.jld2")
 
 @testset "curvefits" begin
   @test_nowarn begin
-    @time r = curvefits(y, t, w, ylu, nptperyear, dt)
+    methods = ["AG", "Zhang", "Beck", "Elmore", "Gu", "Klos"]
+    @time r = curvefits(y, t, w, ylu, nptperyear, dt; methods)
   end
 end
