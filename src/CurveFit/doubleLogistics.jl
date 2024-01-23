@@ -1,4 +1,4 @@
-function doubleLog_Zhang!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
+function doubleLog_Zhang!(ypred::AbstractVector{T}, par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
   t0 = par[1]
   mn = par[2]
   mx = par[3]
@@ -24,7 +24,7 @@ end
 """
 doubleLog_AG
 """
-function doubleLog_AG!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
+function doubleLog_AG!(ypred::AbstractVector{T}, par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
   t0 = par[1]
   mn = par[2]
   mx = par[3]
@@ -48,7 +48,7 @@ end
 """
 doubleLog_Beck
 """
-function doubleLog_Beck!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
+function doubleLog_Beck!(ypred::AbstractVector{T}, par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
   # mn  = par[1]
   # mx  = par[2]
   sos = par[3]
@@ -65,7 +65,7 @@ function doubleLog_Beck!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t::
   end
 end
 
-function doubleLog_Elmore!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
+function doubleLog_Elmore!(ypred::AbstractVector{T}, par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
   # mn  = par[1]
   # mx  = par[2]
   sos = par[3] # SOS
@@ -83,7 +83,7 @@ function doubleLog_Elmore!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t
   end
 end
 
-function doubleLog_Gu!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
+function doubleLog_Gu!(ypred::AbstractVector{T}, par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
   y0 = par[1]
   a1 = par[2]
   a2 = par[3]
@@ -102,7 +102,7 @@ function doubleLog_Gu!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t::Ab
 end
 
 
-function doubleLog_Klos!(ypred::AbstractArray{T,1}, par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
+function doubleLog_Klos!(ypred::AbstractVector{T}, par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real}
   a1 = par[1]
   a2 = par[2]
   b1 = par[3]
@@ -128,29 +128,29 @@ end
 
 ## FUNCTIONS for USERS ---------------------------------------------------------
 
-function doubleLog_template(par::AbstractArray{T,1}, t::AbstractArray{T2,1}, FUN!) where {T<:Real,T2<:Real}
+function doubleLog_template(par::AbstractVector{T}, t::AbstractArray{T2,1}, FUN!) where {T<:Real,T2<:Real}
   ypred = ones(T, length(t)) * 99.0
   FUN!(ypred, par, t)
   ypred
 end
 
-doubleLog_Zhang(par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
+doubleLog_Zhang(par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
   doubleLog_template(par, t, doubleLog_Zhang!)
 
-doubleLog_AG(par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
+doubleLog_AG(par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
   doubleLog_template(par, t, doubleLog_AG!)
 
-doubleLog_Beck(par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
+doubleLog_Beck(par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
   doubleLog_template(par, t, doubleLog_Beck!)
 
-doubleLog_Elmore(par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
+doubleLog_Elmore(par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
   doubleLog_template(par, t, doubleLog_Elmore!)
 
-doubleLog_Gu(par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
+doubleLog_Gu(par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
   doubleLog_template(par, t, doubleLog_Gu!)
 # c('y0', 'a1', 'a2', 'sos', 'rsp', 'eos', 'rau', 'c1', 'c2')
 
-doubleLog_Klos(par::AbstractArray{T,1}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
+doubleLog_Klos(par::AbstractVector{T}, t::AbstractArray{T2,1}) where {T<:Real,T2<:Real} =
   doubleLog_template(par, t, doubleLog_Klos!)
 
 

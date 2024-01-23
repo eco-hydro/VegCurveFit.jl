@@ -1,0 +1,5 @@
+ignore:
+  - "src/back/*"
+  - "src/*/deprecated"
+  - "src/*/temp"
+  - "ext/*/test"
