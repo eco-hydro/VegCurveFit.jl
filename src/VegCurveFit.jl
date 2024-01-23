@@ -1,4 +1,4 @@
-module Curvefit
+module VegCurveFit
 
 import Libdl
 using Parameters
@@ -7,7 +7,7 @@ using Statistics
 
 include("tools.jl")
 
-include("curveFitting/curvefits.jl")
+include("CurveFit/CurveFit.jl")
 include("optim/optim.jl")
 include("weights/wFUN.jl")
 
