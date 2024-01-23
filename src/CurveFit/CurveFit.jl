@@ -28,7 +28,7 @@ FUNCS_doubleLog = Dict(
 )
 
 
-function curvefits(y::AbstractArray{T,1}, t, w::::AbstractArray{T,1},
+function curvefits(y::AbstractArray{T,1}, t, w::AbstractArray{T,1},
   ylu::Vector{Float64}, nptperyear::Integer,
   dt;
   methods=["AG", "Zhang", "Beck", "Elmore"]) where {T<:Real}

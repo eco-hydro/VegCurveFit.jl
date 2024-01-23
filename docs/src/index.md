@@ -1,8 +1,5 @@
-# nlminb.jl
+# VegCurveFit.jl
 
-```@index
-```
-
-```@autodocs
-Modules = [nlminb]
+```docs
+nlminb
 ```

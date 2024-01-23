@@ -1,7 +1,7 @@
-using nlminb
 using Test
+using VegCurveFit
 
-@testset "nlminb.jl" begin
+@testset "nlminb" begin
   # Write your own tests here.
   start = [0.0] # [1, 2, 3, 4]
   lower = [-4.0]
@@ -12,5 +12,6 @@ using Test
   end
 
   f(x) = x[1] - cos(x[1])
-  r = optim_nlminb(start, f, verbose=false)
+  r = nlminb(start, f, verbose=false)
+  @test r["par"][1] == -1.5701006351106073
 end

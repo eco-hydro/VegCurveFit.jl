@@ -1,17 +1,28 @@
-using Documenter, nlminb
+using Documenter, VegCurveFit
+CI = get(ENV, "CI", nothing) == "true"
 
-makedocs(;
-    modules=[nlminb],
-    format=Documenter.HTML(),
-    pages=[
-        "Home" => "index.md",
-    ],
-    repo="https://kongdd/kongdd/nlminb.jl/blob/{commit}{path}#L{line}",
-    sitename="nlminb.jl",
-    authors="Dongdong Kong",
-    assets=String[],
+# Logging.disable_logging(Logging.Warn)
+
+# Make the docs, without running the tests again
+# We need to explicitly add all the extensions here
+makedocs(
+  modules=[
+    VegCurveFit
+  ],
+  format=Documenter.HTML(
+    prettyurls=CI,
+  ),
+  pages=[
+    "Home" => "index.md",
+  ],
+  sitename="VegCurveFit.jl",
+  warnonly=true,
+  clean=false,
 )
 
-deploydocs(;
-    repo="kongdd/kongdd/nlminb.jl",
+# Enable logging to console again
+# Logging.disable_logging(Logging.BelowMinLevel)
+
+deploydocs(
+  repo="github.com/eco-hydro/VegCurveFit.jl.git",
 )
