@@ -8,7 +8,7 @@ using Statistics
 include("tools.jl")
 
 include("CurveFit/CurveFit.jl")
-include("optim/optim.jl")
+include("Optim/Optim.jl")
 include("weights/wFUN.jl")
 
 end # module
