@@ -1,8 +1,4 @@
-get_range(y::AbstractArray{T,1}) where {T<:Real} = [minimum(y), maximum(y)]
-
-get_ylu(y) = get_range(y)
-
-function get_ylu(y, years, w0, width::Integer, I; wmin=0.2)
+function _get_ylu(y, years, w0, width::Integer, I; wmin=0.2)
   n = length(w0)
   I_beg = first(I)
   I_end = last(I)
@@ -43,4 +39,4 @@ function merge_ylu!(ylu, ylu_new)
 end
 
 
-export get_range, get_ylu
+# export get_range, get_ylu

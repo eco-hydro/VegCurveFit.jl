@@ -115,7 +115,7 @@ wSG(y::AbstractVector{FT}; kw...) where {FT<:Real} = wSG(y, ones(FT, size(y)); k
 
 
 # weighted Savitzky Golay filter
-function wSG_low(y::AbstractArray{T,1}, w::AbstractArray{T2,1}; halfwin=1, d=2) where {
+function wSG_low(y::AbstractVector{T}, w::AbstractArray{T2,1}; halfwin=1, d=2) where {
   T<:Real,T2<:Real}
   # constrain the w_min, unless it will lead to matrix division erorr
   # w = deepcopy(w)

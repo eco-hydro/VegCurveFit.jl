@@ -113,8 +113,8 @@ end
 function FitDL_template(input::input_struct, method=nothing; options...)
   par0, lims = init_param(input)
 
-  func_init = getfield(curvefit, Symbol("init_$method"))
-  func! = getfield(curvefit, Symbol("doubleLog_$(method)!"))
+  func_init = getfield(VegCurveFit, Symbol("init_$method"))
+  func! = getfield(VegCurveFit, Symbol("doubleLog_$(method)!"))
 
   prior, lower, upper = func_init(par0, lims)
   # opt (Dict): par, obj

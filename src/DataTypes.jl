@@ -31,21 +31,23 @@ end
 
 
 # input of check_input object
-mutable struct input_struct
-  y::AbstractArray{<:Real,1}
+# TODO: 尚有提升空间
+mutable struct input_struct{T<:Real}
+  y::AbstractVector{T}
   # t::AbstractArray{<:Dates.Date, 1}
   t::AbstractArray{<:Union{Dates.Date,<:Real},1}
-  w::AbstractArray{<:Real,1}
+  w::AbstractVector{T}
 end
 
-function input_struct(y::AbstractArray{T,1}, t::AbstractArray{T,1}) where {T<:Real}
-  input_struct(y, t, ones(y))
+function input_struct(y::AbstractVector{T}, t::AbstractVector{T}) where {T<:Real}
+  input_struct{T}(y, t, ones(T, y))
 end
 
-mutable struct inputI_struct
-  y::AbstractArray{<:Real,1}
-  t::AbstractArray{<:Real,1}
-  w::AbstractArray{<:Real,1}
+
+mutable struct inputI_struct{T}
+  y::AbstractVector{T}
+  t::AbstractVector{<:Real}
+  w::AbstractVector{T}
   ind::UnitRange{Int64}
   # tout::AbstractArray{<:Real, 1}
 end

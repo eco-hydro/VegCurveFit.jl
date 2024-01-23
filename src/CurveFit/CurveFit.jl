@@ -1,33 +1,18 @@
+include("_get_ylu.jl")
 include("init_param.jl")
 include("doubleLogistics.jl")
 
-include("get_ylu.jl")
 include("get_extent.jl")
 include("FitDL.jl")
+include("Constant.jl")
 
 
-DATE_ORIGIN = Date("2000-01-01")
+"""
+# Arguments
+- `y::AbstractVector{T}`: input time series
 
-FUNCS_FITDL = Dict(
-  "AG" => FitDL_AG,
-  "Zhang" => FitDL_Zhang,
-  "Beck" => FitDL_Beck,
-  "Elmore" => FitDL_Elmore,
-  "Gu" => FitDL_Gu,
-  "Klos" => FitDL_Klos
-)
-
-FUNCS_doubleLog = Dict(
-  "AG" => doubleLog_AG,
-  "Zhang" => doubleLog_Zhang,
-  "Beck" => doubleLog_Beck,
-  "Elmore" => doubleLog_Elmore,
-  "Gu" => doubleLog_Gu,
-  "Klos" => doubleLog_Klos
-)
-
-
-function curvefits(y::AbstractArray{T,1}, t, w::AbstractArray{T,1},
+"""
+function curvefits(y::AbstractVector{T}, t, w::AbstractVector{T},
   ylu::Vector{Float64}, nptperyear::Integer,
   dt;
   methods=["AG", "Zhang", "Beck", "Elmore"]) where {T<:Real}
@@ -45,7 +30,7 @@ function curvefits(y::AbstractArray{T,1}, t, w::AbstractArray{T,1},
 
   begs = getDateId(dt[:, :beg], t)
   # peaks = getDateId(dt[:, :peak], t)
-  ends = getDateId(dt[:, :end], t, "after")
+  ends = getDateId(dt[:, :_end], t, "after")
   ns = length(begs) # number of seasons
 
   opts = []
@@ -54,7 +39,7 @@ function curvefits(y::AbstractArray{T,1}, t, w::AbstractArray{T,1},
     I_end = ends[i]
     I = I_beg:I_end
     I_extend = get_extentI(w0, I_beg, I_end, nptperyear)
-    ylu_period = get_ylu(input.y, years, w0, width_ylu, I; wmin=0.2) # ylu_period 
+    ylu_period = _get_ylu(input.y, years, w0, width_ylu, I; wmin=0.2) # ylu_period 
     merge_ylu!(ylu, ylu_period)
     # println(ylu_period)
 
@@ -69,6 +54,7 @@ function curvefits(y::AbstractArray{T,1}, t, w::AbstractArray{T,1},
     ## solve double logistics
     inputI = input_struct(yi, ti, wi)
     opt = Dict{String,Any}()
+    
     for meth = methods
       temp = FUNCS_FITDL[meth](inputI) # par, obj, method
       # opt["ypred"] = getfield(curvefit, Symbol("doubleLog_$meth"))(opt["par"], tout)

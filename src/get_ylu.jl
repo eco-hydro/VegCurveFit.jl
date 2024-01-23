@@ -1,17 +1,20 @@
 import Statistics: quantile
 
 
+get_range(y::AbstractVector{T}) where {T<:Real} = [minimum(y), maximum(y)]
+
+get_ylu(y) = get_range(y)
+
+
 """
     get_ylu(y::AbstractVector{<:Real}, w::AbstractVector{<:Real};
         wmin=0.2, wmid=0.5, wmax=1.0, 
         ratio = 0.4, 
         alpha=0.02, alpha_high=nothing)
-
-
 """
 function get_ylu(y::AbstractVector{<:Real}, w::AbstractVector{<:Real};
-  wmin=0.2, wmid=0.5, wmax=1.0, 
-  ratio = 0.4, 
+  wmin=0.2, wmid=0.5, wmax=1.0,
+  ratio=0.4,
   alpha=0.02, alpha_high=nothing)
 
   alpha_high = null_default(alpha_high, alpha)
@@ -27,7 +30,7 @@ function get_ylu(y::AbstractVector{<:Real}, w::AbstractVector{<:Real};
     w_critical = wmid
   end
   y_good = @view y[w.>=w_critical]
-  
+
   # alpha/2, alpha_high set to 0.05 for remote sensing (20200322)
   ymin = max(quantile(y_good, alpha / 2), 0) # TODO: fix CN-Din
   ymax = quantile(y_good, 1 - alpha_high / 2)

@@ -1,7 +1,7 @@
 using Statistics
 
 # Genius function
-function wBisquare(y::AbstractArray{T,1}, yfit::AbstractArray{T,1}, w::AbstractArray{T2,1},
+function wBisquare(y::AbstractVector{T}, yfit::AbstractVector{T}, w::AbstractArray{T2,1},
   nptperyear::Int;
   options...) where {T<:AbstractFloat,T2<:AbstractFloat}
 
@@ -32,7 +32,7 @@ end
 
 # Examples
 """
-function wBisquare(y::AbstractArray{T,1}, yfit::AbstractArray{T,1}, w::AbstractArray{T2,1};
+function wBisquare(y::AbstractVector{T}, yfit::AbstractVector{T}, w::AbstractArray{T2,1};
   # QC_flag;
   # iter::Integer = 2, 
   # to_upper = true, 

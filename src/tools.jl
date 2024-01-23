@@ -3,12 +3,12 @@
 #     println("optimized improved:", mean(b_old.times)/mean(b_new.times), " times")
 # end
 
-first(x::AbstractArray{T,1}) where {T<:Real} = x[1]
-last(x::AbstractArray{T,1}) where {T<:Real} = x[end]
+# first(x::AbstractVector) = x[1]
+# last(x::AbstractVector) = x[end]
 
 day2num(x::AbstractArray{Dates.Day,1}) = map(x -> x.value, x)
 
-function aggregate(x::AbstractArray{T,1}, by::AbstractArray{T2,1}, FUN::Function=mean) where {
+function aggregate(x::AbstractVector{T}, by::AbstractArray{T2,1}, FUN::Function=mean) where {
   T<:Real,T2<:Real}
 
   grps = unique(by)
@@ -30,5 +30,4 @@ function pmap(vec::Vector{Dict}, prop)
   map(x -> x[prop], vec)
 end
 
-export first, last, day2num, aggregate,
-  pmap2
+export day2num, aggregate, pmap2

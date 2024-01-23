@@ -1,6 +1,7 @@
 using Test
 using VegCurveFit
 
+include("test-curvefit.jl")
 include("test-lambda_init.jl")
 include("test-smooth_SG.jl")
 include("test-smooth_whit.jl")

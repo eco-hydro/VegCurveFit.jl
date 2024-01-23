@@ -15,6 +15,9 @@ temp/
 examples/
 *.R
 *.jld
-*.jld2
+# *.jld2
 
 Manifest.toml
+
+## Figures
+*.pdf

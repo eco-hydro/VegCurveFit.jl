@@ -6,7 +6,7 @@ Weight updating method in TIMESAT
 # Author
 Translated from TIMESAT to Julia by Dongdong Kong (20200808)
 """
-function wTSM!(y::AbstractArray{T,1}, yfit::AbstractArray{T,1}, w::AbstractArray{T,1};
+function wTSM!(y::AbstractVector{T}, yfit::AbstractVector{T}, w::AbstractVector{T};
   iter::Integer=2, nptperyear::Integer=46, wfact::Float64=0.5) where {T<:AbstractFloat}
 
   n = length(y)
@@ -48,7 +48,7 @@ function wTSM!(y::AbstractArray{T,1}, yfit::AbstractArray{T,1}, w::AbstractArray
   end
 end
 
-# function wTSM(y::AbstractArray{T,1}, yfit::AbstractArray{T,1}, w::AbstractArray{T,1}; options...) where {T <: AbstractFloat}
+# function wTSM(y::AbstractVector{T}, yfit::AbstractVector{T}, w::AbstractVector{T}; options...) where {T <: AbstractFloat}
 #     w = copy(w)
 #     wTSM!(y, yfit, w; options...)
 # end
