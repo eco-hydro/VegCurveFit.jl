@@ -112,16 +112,3 @@ end
 
 
 export whit2_cv
-
-# @time z, cve = whit_cv(y, w, 2.0)
-
-# w = y*0 .+ 1
-# @benchmark for i = 1:1e5
-#     z1, cve = whit_cv(y, w, 2.0)
-# end
-# # 0.599415 seconds (2.70 M allocations: 1.687 GiB, 11.99% gc time)
-
-# @time for i = 1:1e5
-#     z2, cve2 = whit2(y, w, 2.0, include_cve = true)
-# end
-# 0.407989 seconds (400.00 k allocations: 227.356 MiB, 11.67% gc time)

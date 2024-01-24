@@ -1,10 +1,12 @@
-function HANTS(y, t, w; periodlen = 365, nf = 3)
+function wHANTS(y::AbstractVector, t, w; periodlen = 365, nf = 3, ignored...)
   n = length(y)
+  # t = 1:n # TODO: 需要核对去除t的版本如何写
+
   ncol = min(2 * nf + 1, n)
 
   amp = zeros(nf + 1)
   phi = zeros(nf + 1)
-  # yz = zeros(n)
+  # z = zeros(n)
 
   ang = 2 * pi * (0:(periodlen-1)) / periodlen
   cs = cos(ang)

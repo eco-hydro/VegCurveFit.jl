@@ -1,11 +1,49 @@
 # include("smooth_HANT/smooth_HANTS.jl")
-include("HANTS/HANTS.jl")
+abstract type AbstractSmoothParam end
+include("DataType.jl")
+
+include("HANTS/wHANTS.jl")
 include("Whittaker/main_whittaker.jl")
 include("SG/main_SG.jl")
 
 include("smooth_whit.jl")
-include("smooth_SG.jl")
-include("smooth_HANTS.jl")
+# include("smooth_SG.jl")
+# include("smooth_HANTS.jl")
+
+
+function wSG(y::AbstractVector{FT}, w::AbstractVector{FT}; 
+  halfwin=1, d=2, check_wmin=false, kw...) where {FT<:Real}
+
+  z = zeros(FT, size(y))
+  wSG!(z, y, w; halfwin, d, check_wmin, kw...) # return z
+end
+
+wSG(y::AbstractVector{FT}; kw...) where {FT<:Real} = 
+  wSG(y, ones(FT, size(y)); kw...)
+
+
+"""
+    whit2(y::AbstractVector{T}, w::AbstractVector{T2}, lambda::Float64; include_cve=true)
+
+Second-order differences Whittaker-Henderson smoothing
+
+z, cve = whit2(y, w;lambda=2.0)
+whit2(y, w; lambda)
+whit2(y, w; lambda)
+
+# Citation
+'Smoothing and interpolation with finite differences' [Eilers P. H. C, 1994]
+(URL: http://dl.acm.org/citation.cfm?id=180916)
+"""
+function whit2(y::AbstractVector{T1}, w::AbstractVector{T2}; 
+  lambda::Real, include_cve=true) where {T1<:Real,T2<:Real}
+
+  interm = interm_whit{promote_type(T1, T2)}(; n=length(y))
+
+  cve = whit2!(y, w, lambda, interm; include_cve)
+  interm.z, cve
+end
+
 
 """
     smooth(y, qc, date;
@@ -18,10 +56,12 @@ include("smooth_HANTS.jl")
 - `alpha`     : for quantile calculating in `get_ylu`
 - `options...`: other parameters to [wBisquare()]
 """
-function smooth(y, w, QC_flag, date;
-  iters=3,
+function smooth(y, w, args...;
+  # FUN = wHANTS, params = (nf=3, periodlen=365),
+  FUN = wSG, params = (halfwin=5, d=2),
+  nptperyear=46, iters=3,
   wmin::Float32=0.2f0, wmid::Float32=0.5f0, wmax::Float32=1.0f0,
-  nptperyear=46,
+  
   alpha=0.02,
   wFUN=wBisquare,
   options=(;),
@@ -30,14 +70,14 @@ function smooth(y, w, QC_flag, date;
   
   # w, QC_flag = qc_FparLai(qc; wmin, wmid, wmax)
   ylu, wc = get_ylu(y, w; wmin, wmid, wmax, alpha)
-  data = DataFrame(; date, y, w, QC_flag)
+  data = DataFrame(; y, w, args...)
 
   # λs = []
   # λᵢ = 2 # default value
   res = map(i -> begin
       # auto adjust parameters
       # push!(λs, λᵢ)
-      yfit = FUN(y, w)
+      yfit = FUN(y, w; params)
       # yfit, cve = whit2(y, w, λᵢ)
       clamp!(yfit, ylu[1], Inf) # constrain in the range of ylu
       # w[yfit .<= ylu[1]] .= wmin
@@ -47,5 +87,5 @@ function smooth(y, w, QC_flag, date;
 
   predict = res # melt_list(res, iter=1:iters)
   # (; data, predict, param=λs)
-  Dict("data" => data, "predict" => predict)
+  Dict("data" => data, "predict" => predict, param => params)
 end

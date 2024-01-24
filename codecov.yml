@@ -3,3 +3,4 @@ ignore:
   - "src/*/deprecated"
   - "src/*/temp"
   - "ext/*/test"
+  - "src/*/backup"

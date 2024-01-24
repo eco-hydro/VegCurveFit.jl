@@ -39,7 +39,7 @@ function smooth_whit(y, w, args...;
       end
       push!(λs, λᵢ)
 
-      yfit, cve = whit2(y, w, λᵢ)
+      yfit, cve = whit2(y, w; lambda=λᵢ)
       clamp!(yfit, ylu[1], Inf) # constrain in the range of ylu
       # w[yfit .<= ylu[1]] .= wmin
       w = wFUN(y, yfit, w; iter=i, nptperyear, wmin=0.05, options...)

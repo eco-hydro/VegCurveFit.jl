@@ -12,14 +12,14 @@ using Test
   z = ones(m)
   interm = interm_whit{FT}(; n=length(y))
   cve = whit2!(y, w, lambda, interm; include_cve=true)
-  z, cve2 = whit2(y, w, lambda)
+  z, cve2 = whit2(y, w; lambda)
 
   @test cve ≈ cve2
   lamb_cv = lambda_cv(y, w, is_plot=true)
   lamb_vcurve = lambda_vcurve(y, w, is_plot=true)
 
-  z1, cve_cv = whit2(y, w, lamb_cv)
-  z2, cve_vcurve = whit2(y, w, lamb_vcurve)
+  z1, cve_cv = whit2(y, w, lambda=lamb_cv)
+  z2, cve_vcurve = whit2(y, w, lambda=lamb_vcurve)
   @test cve_cv < cve
   @test cve_vcurve < cve
   @test cve_cv < cve_vcurve
@@ -30,8 +30,8 @@ end
   d = deserialize("../data/Tumbarumba_EVI2")
   @unpack y, t, w = d
 
-  z, cve1 = whit2_cv(y, w, 2)
-  z, cve2 = whit2(y, w, 2)
+  z, cve1 = whit2_cv(y, w, lambda=2)
+  z, cve2 = whit2(y, w, lambda=2)
   @test cve1 ≈ cve2
   @test_nowarn r = smooth_whit(y, w)
 end

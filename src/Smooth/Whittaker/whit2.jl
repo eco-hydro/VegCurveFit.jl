@@ -1,48 +1,3 @@
-# 定义一个中间变量盛放中间变量
-# intermediate variables of whittaker smoother
-import Parameters: @with_kw, @with_kw_noshow
-
-@with_kw mutable struct interm_whit{T}
-  n::Int
-  z::Vector{T} = zeros(T, n)
-
-  # c: u1, d: v, e: u2
-  c::Vector{T} = zeros(T, n) # u1
-  d::Vector{T} = zeros(T, n) # v
-  e::Vector{T} = zeros(T, n) # u2
-
-  s0::Vector{T} = zeros(T, n)
-  s1::Vector{T} = zeros(T, n)
-  s2::Vector{T} = zeros(T, n)
-end
-
-
-export interm_whit
-
-
-
-"""
-    whit2(y::AbstractVector{T}, w::AbstractVector{T2}, lambda::Float64; include_cve=true)
-
-Second-order differences Whittaker-Henderson smoothing
-
-z, cve = whit2(y, w, lambda)
-whit2(y, w, lambda, z)
-whit2(y, w, lambda, z, c, d, e)
-
-# Citation
-'Smoothing and interpolation with finite differences' [Eilers P. H. C, 1994]
-(URL: http://dl.acm.org/citation.cfm?id=180916)
-"""
-function whit2(y::AbstractVector{T1}, w::AbstractVector{T2}, lamb::Real; include_cve=true) where {T1<:Real,T2<:Real}
-
-  FT = promote_type(T1, T2)
-  interm = interm_whit{FT}(; n=length(y))
-
-  cve = whit2!(y, w, lamb, interm; include_cve)
-  interm.z, cve
-end
-
 # function whit2!(y::AbstractVector{T}, w::AbstractVector{T2}, lambda::Float64, z::AbstractVector{T}; include_cve=true) where {
 #   T<:Real,T2<:Real}
 #   n = length(y)
@@ -51,15 +6,12 @@ end
 #   cve
 # end
 
-function whit2!(y::AbstractVector{<:Real}, w::AbstractVector{<:Real}, lamb::Real, interm::interm_whit{FT};
+function whit2!(y::AbstractVector{<:Real}, w::AbstractVector{<:Real}, lambda::Real, interm::interm_whit{FT};
   include_cve=true) where {FT<:Real}
 
-  lambda::FT = FT(lamb)
+  lambda = FT(lambda)
   @unpack z, c, d, e = interm
-  # z = interm.z
-  # c = interm.c
-  # d = interm.d
-  # e = interm.e
+  
   d[1] = w[1] + lambda
   c[1] = -2 * lambda / d[1]
   e[1] = lambda / d[1]
@@ -113,10 +65,6 @@ function whit2_hat(y::AbstractVector{<:Real}, w::AbstractVector{<:Real}, interm:
   u1 = interm.c
   u2 = interm.e
   @unpack z, s0, s1, s2, n = interm
-  # z = interm.z
-  # s0 = interm.s0
-  # s1 = interm.s1
-  # s2 = interm.s2  
 
   # # Compute diagonal of inverse
   @inbounds @fastmath for i = n:-1:1
@@ -145,6 +93,6 @@ function whit2_hat(y::AbstractVector{<:Real}, w::AbstractVector{<:Real}, interm:
   cve
 end
 
-export whit2, whit2!,
+export whit2!,
   whit2_cpp,
   whit2_hat
