@@ -1,7 +1,7 @@
 """
 Type-2 kurtosis and skewness
 """
-function kurtosis(x::Array{T,1}) where {T<:Real}
+function kurtosis(x::AbstractVector{T}) where {T<:Real}
   n = length(x)
   x = x .- mean(x)
   r = n * sum(x .^ 4) / (sum(x .^ 2)^2)
@@ -10,23 +10,12 @@ function kurtosis(x::Array{T,1}) where {T<:Real}
   # r * (1 - 1/n)^2 - 3 # type_3
 end
 
-function skewness(x::Array{T,1}) where {T<:Real}
+function skewness(x::AbstractVector{T}) where {T<:Real}
   n = length(x)
   x = x .- mean(x)
   r = sqrt(n) * sum(x .^ 3) / (sum(x .^ 2)^(3 / 2))
   r * sqrt(n * (n - 1)) / (n - 2) # type2
   # r * ((1 - 1/n))^(3/2) # type3
-end
-
-function lambda_init(x::Array{T,1}) where {T<:Real}
-  x_mean = mean(x)
-  x_sd = std(x)
-
-  cv = x_sd / x_mean
-  skew = skewness(x)
-  kur = kurtosis(x)
-  lambda = 0.9809 + 0.7247 * x_mean - 2.6752 * x_sd - 0.3854 * skew - 0.0604 * kur # Terra EVI
-  10^lambda
 end
 
 """
@@ -38,19 +27,21 @@ Init the Whittaker parameter lambda
 # Examples
 ```jldoctest
 y = rand(100)
-coef = [0.9809, 0.7247, -2.6752, -0.3854, -0.0604];
+coef = [0.9809, 0.7247, -2.6752, -0.3854, -0.0604]; # Terra EVI
 lambda_init(y, coef)
 ```
 """
-function lambda_init(x::Array{T,1}, coef::Array{Float64,1}) where {T<:Real}
+function lambda_init(x::AbstractVector{T}, 
+  coef::AbstractVector{Float64}=[0.9809, 0.7247, -2.6752, -0.3854, -0.0604]) where {T<:Real}
+
   x_mean = mean(x)
   x_sd = std(x)
 
-  cv = x_sd / x_mean
+  # cv = x_sd / x_mean
   skew = skewness(x)
   kur = kurtosis(x)
 
-  lambda = coef[1] + coef[2] * x_mean + coef[3] * x_sd + coef[4] * skew + coef[5] * kur
+  lambda = coef[1] + coef[2] * x_mean + coef[3] * x_sd + coef[4] * skew + coef[5] * kur 
   # lambda = 0.9809 + 0.7247 * x_mean - 2.6752 * x_sd - 0.3854 * skew - 0.0604 * kur
   10^lambda
 end

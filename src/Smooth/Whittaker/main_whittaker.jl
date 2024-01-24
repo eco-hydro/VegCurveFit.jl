@@ -11,5 +11,5 @@ include("lambda_vcurve.jl")
 include("whit2.jl")
 include("whit2_Frasso2015.jl")
 
-include("smooth_whit.jl")
+# include("smooth_whit.jl")
 # include("smooth_whit_GEE.jl")

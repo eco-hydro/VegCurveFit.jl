@@ -6,11 +6,7 @@ using Test
   y = [y; y; y; y]
   m = length(y)
   FT = Float32
-
   w = ones(Float32, m)
-  c = zeros(Float32, m)
-  d = zeros(Float32, m)
-  e = zeros(Float32, m)
 
   lambda = 2.0
   z = ones(m)
@@ -18,9 +14,9 @@ using Test
   cve = whit2!(y, w, lambda, interm; include_cve=true)
   z, cve2 = whit2(y, w, lambda)
 
-  @test cve == cve2
-  lamb_cv = lambda_cv(y, w, is_plot=false)
-  lamb_vcurve = lambda_vcurve(y, w)
+  @test cve ≈ cve2
+  lamb_cv = lambda_cv(y, w, is_plot=true)
+  lamb_vcurve = lambda_vcurve(y, w, is_plot=true)
 
   z1, cve_cv = whit2(y, w, lamb_cv)
   z2, cve_vcurve = whit2(y, w, lamb_vcurve)

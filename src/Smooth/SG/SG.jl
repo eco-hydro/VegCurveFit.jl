@@ -53,7 +53,7 @@ z1 = SG(y, halfwin = 5)
 z2 = wSG(y, w, halfwin = 5)
 """
 # Savitzky Golay filter
-function SG(y::Array{T,1}; halfwin=1, d=2) where {T<:Real}
+function SG(y::AbstractVector{T}; halfwin=1, d=2) where {T<:Real}
   frame = halfwin * 2 + 1
 
   S = sgmat_S(halfwin, d)

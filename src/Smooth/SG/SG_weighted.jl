@@ -113,6 +113,9 @@ end
 
 wSG(y::AbstractVector{FT}; kw...) where {FT<:Real} = wSG(y, ones(FT, size(y)); kw...)
 
+wSG_low(y::AbstractVector{FT}; kw...) where {FT<:Real} = 
+  wSG_low(y, ones(FT, size(y)); kw...)
+
 
 # weighted Savitzky Golay filter
 function wSG_low(y::AbstractVector{T}, w::AbstractArray{T2,1}; halfwin=1, d=2) where {
@@ -144,6 +147,7 @@ function wSG_low(y::AbstractVector{T}, w::AbstractArray{T2,1}; halfwin=1, d=2) w
   y_tail = @views(B[halfwin+1:frame, :] * y[n-frame+1:n])[:, 1]
   [y_head; y_mid; y_tail]
 end
+
 
 
 export Szeros, as_SMatrix,

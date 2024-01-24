@@ -11,12 +11,21 @@ using Reexport
 @reexport using DelimitedFiles: readdlm
 
 
+# using Plots
+using RecipesBase
+using RecipesBase: plot, plot!
+@shorthands scatter
+@shorthands vline
+function stroke end
+
 include("DataTypes.jl")
 include("tools.jl")
 include("get_ylu.jl")
 
+include("plot_input.jl")
+
 include("Optim/Optim.jl")
-include("weights/wFUN.jl")
+include("weights/weights.jl")
 
 include("Smooth/Smooth.jl")
 include("CurveFit/CurveFit.jl")

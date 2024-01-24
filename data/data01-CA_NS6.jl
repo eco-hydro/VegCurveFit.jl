@@ -10,8 +10,9 @@ nptperyear = INPUT["nptperyear"] |> Int
 y = INPUT["y"]
 t = INPUT["t"]
 w = INPUT["w"]
+QC_flag = INPUT["QC_flag"]
 
 ylu = INPUT["ylu"]
 ylu = [ylu[1], ylu[2]]
 
-jldsave("data/phenofit-CA_NS6.jld2", true; y, t, w, ylu, nptperyear, dt)
+jldsave("data/phenofit-CA_NS6.jld2", true; y, t, w, QC_flag, ylu, nptperyear, dt)

@@ -29,14 +29,6 @@ function smooth_whit(y, w, args...;
 
   # w, QC_flag = qc_FparLai(qc; wmin, wmid, wmax)
   ylu, wc = get_ylu(y, w; wmin, wmid, wmax, alpha)
-  # if use_spike
-  #   ## not tested, kdd
-  #   # 2023-08-08, Yuxuan Xie
-  #   I_spike, ymov = check_spike(y; nptperyear)
-  #   I_bad = @. (w != wmax) # just change point without `good` target
-  #   I_bad_spike = @.((I_spike) & (I_bad))
-  #   y[I_bad_spike] .= minimum(y)
-  # end
   data = DataFrame(; y, w, args)
 
   λs = []
@@ -59,5 +51,13 @@ function smooth_whit(y, w, args...;
   Dict("data" => data, "predict" => predict, "param" => λs)
 end
 
+# if use_spike
+#   ## not tested, kdd
+#   # 2023-08-08, Yuxuan Xie
+#   I_spike, ymov = check_spike(y; nptperyear)
+#   I_bad = @. (w != wmax) # just change point without `good` target
+#   I_bad_spike = @.((I_spike) & (I_bad))
+#   y[I_bad_spike] .= minimum(y)
+# end
 
 export smooth_whit

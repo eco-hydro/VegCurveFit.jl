@@ -10,7 +10,7 @@ include("goal.jl")
 
 """
 function optim_pheno(prior, input::input_struct, FUN!::Function=doubleLog_Beck!;
-  lower=nothing, upper=nothing, iters=2, (wFUN!)=wTSM!, options...)
+  lower=nothing, upper=nothing, iters=2, (wFUN!)=wTSM, options...)
 
   ypred = ones(length(input.y)) .* -0.1 # initial value of -0.1
   # target(par) = goal!(par, FUN!, input, ypred)

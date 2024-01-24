@@ -51,7 +51,7 @@ end
 #   cve
 # end
 
-function whit2!(y::AbstractVector{<:Real}, w::AbstractVector{FT}, lamb::Real, interm::interm_whit{FT};
+function whit2!(y::AbstractVector{<:Real}, w::AbstractVector{<:Real}, lamb::Real, interm::interm_whit{FT};
   include_cve=true) where {FT<:Real}
 
   lambda::FT = FT(lamb)
@@ -106,7 +106,7 @@ end
 
 
 # according to hat and return the generalized cross validation
-function whit2_hat(y::AbstractVector{<:Real}, w::AbstractVector{FT}, interm::interm_whit{FT}) where {FT<:Real}
+function whit2_hat(y::AbstractVector{<:Real}, w::AbstractVector{<:Real}, interm::interm_whit{FT}) where {FT<:Real}
   # c: u1, d: v, e: u2
   # # params: v, u1, u2, s0, s1, s2
   v = interm.d

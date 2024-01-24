@@ -21,3 +21,5 @@ Manifest.toml
 
 ## Figures
 *.pdf
+
+*debug*

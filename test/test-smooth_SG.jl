@@ -3,6 +3,7 @@ using Test
 @testset "Savitzky Golay filter" begin
   # works
   @test wSG([2., 3, 5, 7]; halfwin=1, d=2) ≈ [2, 3, 5, 7]
+  @test wSG_low([2., 3, 5, 7]; halfwin=1, d=2) ≈ [2, 3, 5, 7]
 
   y = 1.0:10 |> collect
   @test wSG(y; halfwin=1, d=1) ≈ y
@@ -10,8 +11,11 @@ using Test
   # 跟R语言版本基本一致
   y = [2.0, 3, 4, 10, 6, 7]
   w = [1.0, 1, 1, 0.2, 1, 1]
-  z = wSG(y, w; halfwin=1, d=1)
-  @test round.(z, digits=2) ≈ [2, 3, 5, 5.45, 7, 6.5]
+  z1 = wSG(y, w; halfwin=1, d=1)
+  z2 = wSG_low(y, w; halfwin=1, d=1)
+  
+  @test round.(z1, digits=2) ≈ [2, 3, 5, 5.45, 7, 6.5]
+  @test round.(z2, digits=2) ≈ [2, 3, 5, 5.45, 7, 6.5]
 
   # wSG对权重调整没有这么敏感
   z = wSG(y, w; halfwin=1, d=2)

@@ -1,8 +1,11 @@
 # include("smooth_HANT/smooth_HANTS.jl")
-include("smooth_HANTS.jl")
-include("smooth_SG/main_SG.jl")
-include("smooth_whittaker/main_whittaker.jl")
+include("HANTS/HANTS.jl")
+include("Whittaker/main_whittaker.jl")
+include("SG/main_SG.jl")
 
+include("smooth_whit.jl")
+include("smooth_SG.jl")
+include("smooth_HANTS.jl")
 
 """
     smooth(y, qc, date;
@@ -24,7 +27,7 @@ function smooth(y, w, QC_flag, date;
   options=(;),
   # use_spike=false,
   ignored...)
-
+  
   # w, QC_flag = qc_FparLai(qc; wmin, wmid, wmax)
   ylu, wc = get_ylu(y, w; wmin, wmid, wmax, alpha)
   data = DataFrame(; date, y, w, QC_flag)

@@ -3,6 +3,11 @@
 #     println("optimized improved:", mean(b_old.times)/mean(b_new.times), " times")
 # end
 
+using CategoricalArrays: CategoricalArray, CategoricalValue, levels, compress, cut
+
+factor(args...) = CategoricalArray(args...) |> compress
+
+
 null_default(x, default) = x === nothing ? default : x
 
 day2num(x::AbstractArray{Dates.Day,1}) = map(x -> x.value, x)
