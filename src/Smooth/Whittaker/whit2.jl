@@ -6,6 +6,13 @@
 #   cve
 # end
 
+"""
+Second-order differences Whittaker-Henderson smoothing
+
+# References
+'Smoothing and interpolation with finite differences' [Eilers P. H. C, 1994]
+(URL: http://dl.acm.org/citation.cfm?id=180916)
+"""
 function whit2!(y::AbstractVector{<:Real}, w::AbstractVector{<:Real}, lambda::Real, interm::interm_whit{FT};
   include_cve=true) where {FT<:Real}
 

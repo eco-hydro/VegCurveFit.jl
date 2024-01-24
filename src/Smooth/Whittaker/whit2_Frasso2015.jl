@@ -14,7 +14,7 @@ Gianluca Frasso and Paul HC Eilers, 2015
 
 1. Gianluca Frasso and Paul HC Eilers, L- and V-curves for optimal smoothing, 2015
 """
-function whit2_cv(y, w, lambda=2.0; include_cve=true)
+function whit2_cv(y, w; lambda=2.0, include_cve = true)
   # w = y*0 .+ 1.0
   n = length(y)
   g0 = ones(n) * 6 #rep(6, n)

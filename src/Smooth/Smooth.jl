@@ -1,3 +1,5 @@
+export wSG, whit2, smooth
+
 # include("smooth_HANT/smooth_HANTS.jl")
 abstract type AbstractSmoothParam end
 include("DataType.jl")
@@ -25,15 +27,9 @@ wSG(y::AbstractVector{FT}; kw...) where {FT<:Real} =
 """
     whit2(y::AbstractVector{T}, w::AbstractVector{T2}, lambda::Float64; include_cve=true)
 
-Second-order differences Whittaker-Henderson smoothing
-
 z, cve = whit2(y, w;lambda=2.0)
 whit2(y, w; lambda)
 whit2(y, w; lambda)
-
-# Citation
-'Smoothing and interpolation with finite differences' [Eilers P. H. C, 1994]
-(URL: http://dl.acm.org/citation.cfm?id=180916)
 """
 function whit2(y::AbstractVector{T1}, w::AbstractVector{T2}; 
   lambda::Real, include_cve=true) where {T1<:Real,T2<:Real}
