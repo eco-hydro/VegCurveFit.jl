@@ -20,6 +20,6 @@ examples/
 Manifest.toml
 
 ## Figures
-*.pdf
+# *.pdf
 
 *debug*

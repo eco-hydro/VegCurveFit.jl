@@ -46,11 +46,11 @@ function multiply_w_sqrt!(S::AbstractMatrix{T}, w::AbstractVector{FT}, Snew::Abs
   end
 end
 
-function check_wmin(w::AbstractVecOrMat; wmin=1e-4)
+function _check_wmin(w::AbstractVecOrMat; wmin=1e-4)
   w = deepcopy(w)
   w[w.<wmin] .= wmin
   w
 end
 
 
-export multiply_w_sqrt, check_wmin;
+export multiply_w_sqrt

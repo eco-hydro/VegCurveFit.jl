@@ -22,7 +22,6 @@ makedocs(
 
 # Enable logging to console again
 # Logging.disable_logging(Logging.BelowMinLevel)
-
 deploydocs(
   repo="github.com/eco-hydro/VegCurveFit.jl.git",
 )

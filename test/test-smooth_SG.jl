@@ -2,7 +2,7 @@ using Test
 
 @testset "Savitzky Golay filter" begin
   # works
-  @test wSG([2., 3, 5, 7]; halfwin=1, d=2) ≈ [2, 3, 5, 7]
+  @test wSG([2.0, 3, 5, 7]; halfwin=1, d=2, check_wmin=true) ≈ [2, 3, 5, 7]
   @test wSG_low([2., 3, 5, 7]; halfwin=1, d=2) ≈ [2, 3, 5, 7]
 
   y = 1.0:10 |> collect

@@ -6,7 +6,8 @@
 x_lims, x_ticks = date_ticks(dates)
 ```
 """
-function date_ticks(date_lims; by=nothing, expand=Dates.Month(2))
+function date_ticks(date_min, date_max; by=nothing, expand=Dates.Month(2))
+  date_lims = [date_min, date_max]
   if isa(expand, Dates.Month)
     expand = expand * [1, 1]
   end
@@ -31,10 +32,10 @@ function date_ticks(date_lims; by=nothing, expand=Dates.Month(2))
   x_lims, xticks
 end
 
-date_ticks2(dates; kw...) = date_ticks(extrema(dates); kw...)
+date_ticks(dates::AbstractVector; kw...) = date_ticks(extrema(dates)...; kw...)
 
 
-function plot_input(dates, vals, QC_flag; date_lims=nothing, base_size=4.5, kw...)
+function plot_input(t, y, QC_flag; date_lims=nothing, base_size=4.5, kw...)
   # level_names = ["snow", "cloud", "shadow", "aerosol", "marginal", "good"]
   level_names_r = ["good", "marginal", "snow", "cloud", "aerosol", "shadow"]
   # I_x, I_y = match2(level_names, level_names_r)
@@ -46,9 +47,9 @@ function plot_input(dates, vals, QC_flag; date_lims=nothing, base_size=4.5, kw..
   qc_colors = ["grey60", "#00BFC4", "#F8766D", "#C77CFF", "#B79F00", "#C77CFF"]
   qc_size = [0.5, 0.5, 0.5, 0, 0, 0] .+ base_size
 
-  x_lims, x_ticks = date_lims === nothing ? date_ticks2(dates) : date_ticks(date_lims)
+  x_lims, x_ticks = date_lims === nothing ? date_ticks(t) : date_ticks(date_lims...)
 
-  p = plot(dates, vals,
+  p = plot(t, y,
     xticks=x_ticks, xlims=x_lims,
     gridlinewidth=1, grid=:x,
     label="",
@@ -59,7 +60,7 @@ function plot_input(dates, vals, QC_flag; date_lims=nothing, base_size=4.5, kw..
     ind = findall(QC_flag .== flgs[i])
     # print(ind)
     # println(i, " ", length(ind))
-    scatter!(p, dates[ind], vals[ind],
+    scatter!(p, t[ind], y[ind],
       markersize=qc_size[i],
       markerstrokewidth=1,
       markerstrokecolor=qc_colors[i],
@@ -72,4 +73,4 @@ function plot_input(dates, vals, QC_flag; date_lims=nothing, base_size=4.5, kw..
 end
 
 
-export plot_input, date_ticks2, date_ticks
+export plot_input, date_ticks

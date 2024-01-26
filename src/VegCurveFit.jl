@@ -9,7 +9,7 @@ using Statistics
 using Reexport
 @reexport using Serialization: serialize, deserialize
 @reexport using DelimitedFiles: readdlm
-
+@reexport using UnPack
 
 # using Plots
 using RecipesBase

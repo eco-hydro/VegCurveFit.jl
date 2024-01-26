@@ -68,6 +68,44 @@ gr(framestyle=:box)
 
 d = fread("data/Tumbarumba_EVI2.csv")
 @unpack y, t, w, QC_flag = d
+w = eltype(y).(w)
+t = 1:length(y)
 
-plot(t, y)
+# x_lims, x_ticks = date_ticks(t)
+# xticks = x_ticks, xlims = x_lims,
+p = plot(t, y; label="VI")
+# Plots.scatter!(p, t, y; markersize=2, label=nothing)
+
+## Smooth
+r = smooth_whit(y, w; lambda=1000)
+niter = length(r["predict"])
+pred = r["predict"]
+for i = 1:niter
+  d = pred[i]
+  plot!(p, t, d.z, label="iter $i")
+end
+
+p
+# plot_input(t, y, QC_flag)
+```
+
+## SG and Whit has no ability to interp for arbitrary space x
+
+
+```{julia}
+using VegCurveFit
+using Dates
+using Plots
+gr(framestyle=:box)
+
+d = deserialize("data/Tumbarumba_EVI2")
+@unpack y, t, w = d
+
+x = datetime2julian.(DateTime.(t)) |> x -> x .- x[1]
+
+lambda = Float64(1e7)
+@time z = whit(y, x; lambda, d=2);
+
+plot(x, y)
+plot!(x, z)
 ```

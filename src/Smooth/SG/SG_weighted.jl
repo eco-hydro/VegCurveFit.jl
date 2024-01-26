@@ -48,7 +48,7 @@ function wSG!(z::AbstractVector{FT}, y::AbstractVector{FT}, w::AbstractVector{FT
   n = length(y)
   @unpack d, frame, halfwin = interm
 
-  check_wmin && (w = check_wmin(w))
+  check_wmin && (w = _check_wmin(w))
 
   if (sum(w) == n)
     z .= SG(y; halfwin=interm.halfwin, d)

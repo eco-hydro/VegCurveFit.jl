@@ -1,4 +1,4 @@
-function wHANTS(y::AbstractVector, t, w; periodlen = 365, nf = 3, ignored...)
+function wHANTS(y::AbstractVector, w, t; periodlen = 365, nf = 3, ignored...)
   n = length(y)
   # t = 1:n # TODO: 需要核对去除t的版本如何写
 

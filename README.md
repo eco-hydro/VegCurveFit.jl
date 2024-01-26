@@ -7,6 +7,16 @@
 
 > Dongdong Kong
 
+# Functions
+
+- [x] weighted Whittaker-Henderson smoothing and interpolation
+- [x] weighted Savitzky Golay filter
+- [x] HANTS (untested)
+- [x] Double Logistics
+- [ ] The GPU version
+- [ ] Growing season dividing
+
+
 # References
 
 > [1] Kong, D., McVicar, T. R., Xiao, M., Zhang, Y., Peña-Arancibia, J. L., Filippa, G., Xie, Y., Gu, X. (2022). phenofit: An R package for extracting vegetation phenology from time series remote sensing. __*Methods in Ecology and Evolution*__, 13, 1508-1527. <https://doi.org/10.1111/2041-210X.13870>

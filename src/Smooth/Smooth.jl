@@ -73,7 +73,7 @@ function smooth(y, w, args...;
   res = map(i -> begin
       # auto adjust parameters
       # push!(λs, λᵢ)
-      yfit = FUN(y, w; params)
+      yfit = FUN(y, w; params...)
       # yfit, cve = whit2(y, w, λᵢ)
       clamp!(yfit, ylu[1], Inf) # constrain in the range of ylu
       # w[yfit .<= ylu[1]] .= wmin
