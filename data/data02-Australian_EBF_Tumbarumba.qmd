@@ -102,10 +102,30 @@ d = deserialize("data/Tumbarumba_EVI2")
 @unpack y, t, w = d
 
 x = datetime2julian.(DateTime.(t)) |> x -> x .- x[1]
+```
 
+
+```{julia}
 lambda = Float64(1e7)
 @time z = whit(y, x; lambda, d=2);
 
 plot(x, y)
 plot!(x, z)
+
+@time z2, amp, phi = wHANTS(y, w, x; nf=1);
+plot!(x, z2)
 ```
+
+```{julia}
+using RCall
+
+R"""
+y = $y
+x = $x
+save(x, y, file = "debug.rda")
+"""
+
+```
+
+
+> 和R语言版本对比一下

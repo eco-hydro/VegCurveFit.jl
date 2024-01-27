@@ -34,4 +34,8 @@ function pmap(vec::Vector{Dict}, prop)
   map(x -> x[prop], vec)
 end
 
+# r_floor(x::Real, y::Real) = floor(Int, x / y)
+r_floor(x::Real) = floor(Int, x)
+
+export r_floor
 export day2num, aggregate, pmap2

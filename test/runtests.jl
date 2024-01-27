@@ -2,6 +2,7 @@ using Test
 using VegCurveFit
 using DataFrames, Plots
 
+include("test-smooth_HANTS.jl")
 include("test-weights.jl")
 include("test-plot_input.jl")
 
