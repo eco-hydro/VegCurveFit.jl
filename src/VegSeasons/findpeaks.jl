@@ -39,7 +39,8 @@ function findpeaks(x::AbstractVector{T};
   grps = filter(x -> length(x) > 0, findall(peakpat, xs))
   # find index positions and maximum values
   peaks = map(grps) do m
-    v, i = findmax(@view x[m])
+    i = nanargmax(@view x[m])
+    v = x[m][i]
     # fix extreme value positions on the plateau
     i = floor(Int, median(findall(@view(x[m]) .== v)))
     pos_beg = first(m)
