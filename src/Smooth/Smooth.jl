@@ -24,21 +24,6 @@ wSG(y::AbstractVector{FT}; kw...) where {FT<:Real} =
   wSG(y, ones(FT, size(y)); kw...)
 
 
-"""
-    whit2(y::AbstractVector{T}, w::AbstractVector{T2}, lambda::Float64; include_cve=true)
-
-z, cve = whit2(y, w;lambda=2.0)
-whit2(y, w; lambda)
-whit2(y, w; lambda)
-"""
-function whit2(y::AbstractVector{T1}, w::AbstractVector{T2}; 
-  lambda::Real, include_cve=true) where {T1<:Real,T2<:Real}
-
-  interm = interm_whit{promote_type(T1, T2)}(; n=length(y))
-
-  cve = whit2!(y, w, lambda, interm; include_cve)
-  interm.z, cve
-end
 
 
 """

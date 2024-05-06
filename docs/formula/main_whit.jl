@@ -1,5 +1,6 @@
 using LinearAlgebra, SparseArrays
 using Symbolics
+import Symbolics: scalarize, variables
 
 @variables λ
 
@@ -40,4 +41,36 @@ function LU_decompose(A₁)
     # display(A₁)
   end
   (; L, U=A₁)
+end
+
+function diag_m(x)
+  n = length(x)
+  M = Matrix{Num}(undef, n, n)
+  for i = 1:n, j = 1:n
+    if i == j
+      M[i, j] = x[i]
+    else
+      M[i, j] = 0.0
+    end
+  end
+  M
+end
+
+# 代数余子式; algebraic complement
+function complement(A::AbstractArray, i=1, j=1; verbose=false)
+  i, j = j, i
+  m, n = size(A)
+  _A = A[setdiff(1:m, i), setdiff(1:n, j)]
+  verbose && display(_A)
+  (-1)^(i + j) * det(_A)
+end
+
+function complement(A::AbstractArray)
+  R = similar(A)
+  fill!(R, 0)
+  m, n = size(A)
+  for i = 1:m, j = 1:n
+    R[i, j] = complement(A, i, j) # 代数余子式需要进行一次转置，才能得到A* = C'
+  end
+  R
 end
