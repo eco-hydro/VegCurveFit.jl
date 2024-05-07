@@ -33,8 +33,8 @@ function WHIT(y::AbstractVector, w::AbstractVector, x::AbstractVector;
   L = cholesky(A, perm=1:n).L # sparse
   z = L' \ (L \ (w.*y))
   # display(sparse(L)[1:7, 1:7])
-  
-  cve = 999.0
+
+  cve = -999.0
   if include_cve
     inv_L = Matrix(sparse(L))^-1 # 这一步可能消耗了较多的时间
     H = inv_L' * inv_L * W # 借力cholesky
