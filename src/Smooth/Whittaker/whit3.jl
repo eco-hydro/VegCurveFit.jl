@@ -1,5 +1,4 @@
 export whit3
-include("whit3_hat.jl")
 
 function whit3(y::AbstractVector{T1}, w::AbstractVector{T2};
   lambda::Real, include_cve=true) where {T1<:Real,T2<:Real}

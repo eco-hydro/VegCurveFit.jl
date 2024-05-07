@@ -116,7 +116,7 @@ function lambda_cv(y::AbstractVector{T}, w::AbstractVector{T2};
   for i in 1:n
     lambda = 10^lg_lambdas[i]
     # z, cvs[i] = whit2(y, w, lambda)
-    cvs[i] = whit2!(y, w, lambda, interm; include_cve=true)
+    cvs[i] = whit2!(y, w, lambda, interm; include_cve=true)[2]
     # fits[i] = fidelity(y, z, w)
     # pens[i] = roughness(z, d)
   end

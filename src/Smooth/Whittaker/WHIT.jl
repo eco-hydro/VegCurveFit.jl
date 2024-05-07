@@ -43,7 +43,7 @@ function WHIT(y::AbstractVector, w::AbstractVector, x::AbstractVector;
     r = @. (y - z) / (1 - h)
     cve = sqrt(sum(r .* r .* w) / sum(w))
   end
-  z, h, cve
+  z, cve
 end
 
 export WHIT, speye, diff, ddmat
