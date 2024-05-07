@@ -4,7 +4,7 @@ using JLD2, UnPack
 
 
 @testset "plot_input" begin
-  @unpack y, w, t, QC_flag, ylu, dt, nptperyear = load("../data/phenofit-CA_NS6.jld2")
+  @unpack y, w, t, QC_flag, ylu, dt, nptperyear = load("../data/phenofit_CA-NS6.jld2")
   @test_nowarn p = plot_input(t, y, QC_flag)
 end
 

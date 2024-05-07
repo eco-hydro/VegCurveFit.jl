@@ -4,3 +4,4 @@ ignore:
   - "src/*/temp"
   - "ext/*/test"
   - "src/*/backup"
+  - "src/Smooth/Whittaker/WHIT_GPU.jl"

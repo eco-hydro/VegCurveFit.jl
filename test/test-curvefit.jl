@@ -1,6 +1,6 @@
 using Test
 using JLD2, UnPack, DataFrames
-@unpack y, w, t, ylu, dt, nptperyear = load("../data/phenofit-CA_NS6.jld2")
+@unpack y, w, t, ylu, dt, nptperyear = load("../data/phenofit_CA-NS6.jld2")
 
 @testset "curvefits" begin
   @test_nowarn begin
