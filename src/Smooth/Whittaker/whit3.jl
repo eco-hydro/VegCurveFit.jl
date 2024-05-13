@@ -97,13 +97,22 @@ B^(-1) = B * U^(-1)' + (1 - U) * B^(-1) # Hutchinson 1985, Eq. 3.3
 ```
 
 # Arguments
-- `U`: [
+- `U`: A = L D L' = U' * D * U. Note `U = L'`!
+
+```
+U = [
   1 c₁ e₁ f₁ 0
   0 1  c₂ e₂ f₂
   0 0  1  c₃ e₃
   0 0  0  1  c₄
-  0 0  0  0  1
-]
+  0 0  0  0  1]
+U2 = [
+  c₁ e₁ f₁ 0
+  c₂ e₂ f₂ 0
+  c₃ e₃ 0  0
+  c₄ 0  0  0 
+  0  0  0  0 ]
+```
 
 Dongdong Kong, CUG, 2024-05-07
 """
@@ -134,4 +143,4 @@ function cal_diag(U2::AbstractMatrix{T}, d::AbstractVector{T}; m=3) where {T<:Re
   S[:, 1]
 end
 
-export whit3_hat
+export whit3_hat, cal_diag
