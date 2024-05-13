@@ -4,12 +4,14 @@ using Statistics
 # include("smooth_whittaker/whittaker2.jl")
 # include("smooth_whittaker/lambda_cv.jl")
 # include("smooth_whittaker/smooth_whit_v01.jl")
+
 include("lambda_init.jl")
 include("lambda_vcurve.jl")
 include("whit2.jl")
 include("whit2_Frasso2015.jl")
 
 include("whit3.jl")
+
 include("WHIT.jl")
 # include("smooth_whit.jl")
 # include("smooth_whit_GEE.jl")
